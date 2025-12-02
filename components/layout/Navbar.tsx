@@ -4,6 +4,7 @@ import ThemeToggle from './ThemeToggle';
 import SearchInput from './SearchInput';
 import Notifications from './Notifications';
 import UserButton from './UserButton';
+import Link from 'next/link';
 
 const Navbar = () => {
   return (
@@ -11,14 +12,22 @@ const Navbar = () => {
       <Container>
         <div className={containerDivStyles}>
           <div className={logoStyles}>
-            <MdNoteAlt size={24} />
-            <div className='font-bold text-xl'>WEBDEV.blog</div>
+            <Link href='/'>
+              <MdNoteAlt size={24} />
+            </Link>
+            <div className='font-bold text-xl'>
+              <Link href='/'>WEBDEV.blog</Link>
+            </div>
           </div>
           <SearchInput />
           <div className={leftMenuStyles}>
             <ThemeToggle />
             <Notifications />
             <UserButton />
+            <>
+              <Link href='/login'>Login</Link>
+              <Link href='/register'>Register</Link>
+            </>
           </div>
         </div>
       </Container>

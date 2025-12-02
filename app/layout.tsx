@@ -48,4 +48,4 @@ export default function RootLayout({ children }: RootLayoutProps) {
   );
 }
 
-// Stopped at 47mins 45secs in the video
+// Stopped at 1:46:30 in the video
