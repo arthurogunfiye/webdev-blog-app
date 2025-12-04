@@ -1,11 +1,5 @@
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-const page = ({ params }: Props) => {
-  const { id } = params;
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
   // We can use the id to fetch user data from an API or database here
   return (
     <div>
