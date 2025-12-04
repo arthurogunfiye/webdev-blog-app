@@ -641,3 +641,195 @@ const page = ({ params }: { params: { id: string } }) => {
   return <div>User Profile for ID: {params.id} under development...</div>;
 };
 ```
+
+---
+
+An **ORM (Object–Relational Mapping)** is a programming technique—and usually a library or framework—that lets you interact with a **relational database (like PostgreSQL, MySQL, SQLite)** using **objects and code**, instead of writing raw SQL queries.
+
+---
+
+# ✅ **What an ORM Does**
+
+An ORM maps:
+
+**Database tables → Classes**
+**Rows → Objects (instances)**
+**Columns → Attributes (fields of the object)**
+
+So instead of doing this:
+
+```sql
+SELECT * FROM users WHERE id = 1;
+```
+
+You do:
+
+```python
+user = User.get(id=1)
+```
+
+Or in JavaScript:
+
+```js
+const user = await User.findByPk(1);
+```
+
+The ORM generates the SQL for you behind the scenes.
+
+---
+
+# 🔧 **How an ORM Works (In Simple Steps)**
+
+### **1. Schema Mapping**
+
+The ORM reads your models (classes) and maps them to database tables.
+
+Example model:
+
+```python
+class User(Base):
+    id = Integer(primary_key=True)
+    name = String()
+```
+
+The ORM knows this corresponds to SQL:
+
+```sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name TEXT
+);
+```
+
+---
+
+### **2. Query Building**
+
+Your method calls get turned into SQL queries.
+
+Example:
+
+```js
+User.findAll({ where: { active: true } });
+```
+
+The ORM converts that into:
+
+```sql
+SELECT * FROM users WHERE active = TRUE;
+```
+
+---
+
+### **3. Object Instantiation**
+
+The returned rows are turned into objects in your language.
+
+SQL result:
+
+| id  | name  |
+| --- | ----- |
+| 1   | Alice |
+
+becomes:
+
+```python
+User(id=1, name="Alice")
+```
+
+---
+
+### **4. Change Tracking**
+
+If you modify the object…
+
+```python
+user.name = "Bob"
+```
+
+…the ORM knows what changed and generates the correct SQL:
+
+```sql
+UPDATE users SET name = 'Bob' WHERE id = 1;
+```
+
+---
+
+### **5. Relationship Handling**
+
+ORMs handle foreign keys automatically:
+
+- **One-to-many**
+- **Many-to-many**
+- **Join tables**
+- **Nested queries / eager loading**
+
+Example:
+
+```js
+const posts = await user.getPosts();
+```
+
+The ORM builds the join:
+
+```sql
+SELECT * FROM posts WHERE user_id = 1;
+```
+
+---
+
+# ⭐ Advantages of ORMs
+
+### **✔ Faster development**
+
+Write less SQL manually.
+
+### **✔ Database abstraction**
+
+Switch between SQLite → PostgreSQL → MySQL with minimal changes.
+
+### **✔ Safer**
+
+Prevents SQL injection by using parameterized queries.
+
+### **✔ Cleaner, more readable code**
+
+Queries look like normal object operations.
+
+---
+
+# ⚠ When ORMs Are Not Ideal
+
+ORMs can be problematic when:
+
+- performance is critical
+- queries become deeply complex
+- you need raw SQL features or database-specific tuning
+
+Many engineers use ORM **+ raw SQL together**.
+
+---
+
+# 💡 Examples of Popular ORMs
+
+### **JavaScript/TypeScript**
+
+- Prisma
+- Sequelize
+- TypeORM
+- Drizzle ORM
+
+### **Python**
+
+- SQLAlchemy
+- Django ORM
+
+### **Java**
+
+- Hibernate / JPA
+
+### **Ruby**
+
+- ActiveRecord (Rails)
+
+---
