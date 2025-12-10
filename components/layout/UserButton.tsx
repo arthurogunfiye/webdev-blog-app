@@ -1,3 +1,5 @@
+'use client';
+
 import { FaRegBookmark } from 'react-icons/fa';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
@@ -8,6 +10,7 @@ import {
   DropdownMenuSeparator
 } from '../ui/dropdown-menu';
 import { UserRound, User, Pencil, Shield, LogOutIcon } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 
 const UserButton = () => {
   return (
@@ -46,7 +49,7 @@ const UserButton = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <button className={buttonStyles}>
+          <button className={buttonStyles} onClick={() => signOut()}>
             <LogOutIcon size={18} /> Sign Out
           </button>
         </DropdownMenuItem>

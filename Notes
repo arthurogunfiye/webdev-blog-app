@@ -833,3 +833,145 @@ Many engineers use ORM **+ raw SQL together**.
 - ActiveRecord (Rails)
 
 ---
+
+Edge Compatibility
+
+Go to authjs.dev
+Go Guides from the Navbar menu
+Select Edge Compatibility from the left sidebar
+
+We need to do this setup because we are making use of PostgreSql and Prisma which are running on the edge.
+
+Here’s a clear, beginner-friendly explanation of **what an edge runtime is**, without assuming any technical background.
+
+---
+
+# 🧠 What Is an “Edge Runtime”?
+
+Think of the internet as a giant network where computers talk to each other.
+When you visit a website, your request normally travels across the world to a **central server** (often in a big data center in one city). That server processes your request and sends the result back—like a round-trip flight.
+
+An **edge runtime** is a way of running code **closer to you**, right at the “edge” of the network.
+
+---
+
+# 🌍 The “Edge” Part
+
+“**Edge**” simply means **computers that are physically located closer to the user**—in many cities around the world.
+
+Example:
+
+- Instead of your request going from London → New York → London,
+- it might go from London → nearby edge server → London.
+
+Shorter trip → faster response.
+
+Companies like Cloudflare, Vercel, and Netlify have hundreds of these small edge locations globally.
+
+---
+
+# 🧩 The “Runtime” Part
+
+A **runtime** is just the **environment that runs your code**.
+
+You can think of it like:
+
+- A kitchen where the cooking happens.
+- Your code is the recipe.
+- The runtime provides the tools (oven, stove, utensils) to run it.
+
+Different runtimes have different tools.
+For example:
+
+- Node.js runtime (on a server)
+- Browser runtime (JavaScript in Chrome)
+- Edge runtime (JavaScript/WebAssembly at the network edge)
+
+---
+
+# ⚡ So What Is an Edge Runtime?
+
+Putting it together:
+
+👉 **An edge runtime is a lightweight environment that runs your code on servers located close to the user.**
+
+This makes apps:
+
+- **faster** → less distance traveled
+- **more responsive** → good for real-time features
+- **more scalable** → load is spread across many edge locations
+
+But since it’s lightweight, it often has:
+
+- **fewer built-in features** than a full server (e.g., no access to full Node.js APIs)
+- **limits on processing power**, because it must run quickly
+
+---
+
+# 📦 Example to Make It Crystal Clear
+
+Imagine a food delivery service.
+
+### Traditional Server
+
+1. You call the restaurant (in one city).
+2. They confirm your address.
+3. They send the food.
+
+If the restaurant is far away, the call and delivery take longer.
+
+### Edge Runtime
+
+1. You call a **local branch** of the service.
+2. They look up your info instantly.
+3. They tell the main restaurant what to do.
+
+The answering part is much faster because it's local.
+
+In computing, that “local branch” is the **edge runtime**.
+
+---
+
+# 🤖 Real-World Uses
+
+Edge runtimes are especially good for:
+
+- Authentication checks
+- A/B testing
+- Redirects
+- Personalizing websites
+- Realtime chat or updates
+- Rate limiting (blocking too many requests)
+- API requests that need to be fast globally
+
+---
+
+# 👍 Summary (Beginner-Friendly)
+
+- **Edge = close to user**
+- **Runtime = system that runs your code**
+- **Edge runtime = runs your code on nearby mini-servers so the website feels faster**
+
+It’s like moving small pieces of your app closer to the user so each interaction is almost instant.
+
+---
+
+Clerk Middleware
+
+Go to clerk.com
+Go to Docs in the Navbar menu and select Nextjs from the expanded dropdown
+Copy and paste the clerkMiddleware() code
+
+---
+
+http://localhost:3000/api/auth/signin?error=OAuthAccountNotLinked
+
+---
+
+Instructions to obtain the schema code:
+Open authjs.dev
+Click on Get Started button
+Select Database from the left sidebar
+Select Prisma from the official adapters list
+Select Schema from the right sidebar
+Copy the PostgreSQL schema code into this file

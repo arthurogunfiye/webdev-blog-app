@@ -1,3 +1,5 @@
+'use client';
+
 import { MdNoteAlt } from 'react-icons/md';
 import Container from './Container';
 import ThemeToggle from './ThemeToggle';
@@ -5,8 +7,25 @@ import SearchInput from './SearchInput';
 import Notifications from './Notifications';
 import UserButton from './UserButton';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
+  const session = useSession();
+  const isUserLoggedIn = session.status === 'authenticated';
+  const path = usePathname();
+
+  // This effect runs whenever the path or user login status changes
+  useEffect(() => {
+    if (!isUserLoggedIn && path) {
+      const updateSession = async () => {
+        await session.update();
+      };
+      updateSession();
+    }
+  }, [path, isUserLoggedIn]);
+
   return (
     <nav className={navbarStyles}>
       <Container>
@@ -22,12 +41,14 @@ const Navbar = () => {
           <SearchInput />
           <div className={leftMenuStyles}>
             <ThemeToggle />
-            <Notifications />
-            <UserButton />
-            <>
-              <Link href='/login'>Login</Link>
-              <Link href='/register'>Register</Link>
-            </>
+            {isUserLoggedIn && <Notifications />}
+            {isUserLoggedIn && <UserButton />}
+            {!isUserLoggedIn && (
+              <>
+                <Link href='/login'>Login</Link>
+                <Link href='/register'>Register</Link>
+              </>
+            )}
           </div>
         </div>
       </Container>

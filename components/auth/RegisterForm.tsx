@@ -7,8 +7,15 @@ import Button from '../common/Button';
 import Heading from '../common/Heading';
 import SocialAuth from './SocialAuth';
 import { RegisterSchema, RegisterSchemaType } from '@/schemas/RegisterSchema';
+import { signUp } from '@/actions/auth/register';
+import { useState, useTransition } from 'react';
+import Alert from '../common/Alert';
 
 const RegisterForm = () => {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>('');
+  const [success, setSuccess] = useState<string | undefined>('');
+
   const {
     register,
     handleSubmit,
@@ -16,7 +23,14 @@ const RegisterForm = () => {
   } = useForm<RegisterSchemaType>({ resolver: zodResolver(RegisterSchema) });
 
   const onSubmit: SubmitHandler<RegisterSchemaType> = data => {
-    console.log('Form data: ', data);
+    setSuccess('');
+    setError('');
+    startTransition(() => {
+      signUp(data).then(response => {
+        setError(response.error);
+        setSuccess(response.success ? 'Verification Email Sent!' : undefined);
+      });
+    });
   };
 
   return (
@@ -28,7 +42,7 @@ const RegisterForm = () => {
         register={register}
         errors={errors}
         placeholder='name'
-        defaultValue='Arthur Ogunfuye'
+        disabled={isPending}
       />
       <FormField
         id='email'
@@ -36,7 +50,7 @@ const RegisterForm = () => {
         register={register}
         errors={errors}
         placeholder='email'
-        defaultValue='arthur.ogunfuye@email.com'
+        disabled={isPending}
       />
       <FormField
         id='password'
@@ -45,6 +59,7 @@ const RegisterForm = () => {
         errors={errors}
         placeholder='password'
         defaultValue='12345Qwerty!'
+        disabled={isPending}
       />
       <FormField
         id='confirmPassword'
@@ -53,8 +68,16 @@ const RegisterForm = () => {
         errors={errors}
         placeholder='confirm password'
         defaultValue='12345Qwerty!'
+        disabled={isPending}
       />
-      <Button type='submit' label='Register' />
+
+      {error && <Alert message={error} error />}
+      {success && <Alert message={success} success />}
+      <Button
+        type='submit'
+        label={isPending ? 'Submitting...' : 'Register'}
+        disabled={isPending}
+      />
       <div className='flex justify-center my-2'>Or</div>
       <SocialAuth />
     </form>

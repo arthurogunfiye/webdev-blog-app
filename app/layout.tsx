@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { ThemeProvider } from 'next-themes';
+import { auth } from '@/auth';
+import { SessionProvider } from 'next-auth/react';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -24,27 +26,30 @@ type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const session = await auth();
   return (
-    <html lang='en' suppressHydrationWarning>
-      <body
-        className={cn(
-          'antialiased flex flex-col min-h-screen px-2',
-          roboto.variable
-        )}
-      >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
+    <SessionProvider session={session}>
+      <html lang='en' suppressHydrationWarning>
+        <body
+          className={cn(
+            'antialiased flex flex-col min-h-screen px-2',
+            roboto.variable
+          )}
         >
-          <Navbar />
-          <main className='flex-grow'>{children}</main>
-          <Footer />
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            <main className='flex-grow'>{children}</main>
+            <Footer />
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
 
