@@ -30,28 +30,29 @@ type RootLayoutProps = {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await auth();
   return (
-    <EdgeStoreProvider>
-      <SessionProvider session={session}>
-        <html lang='en' suppressHydrationWarning>
-          <body
-            className={cn(
-              'antialiased flex flex-col min-h-screen px-2',
-              roboto.variable
-            )}
+    <SessionProvider session={session}>
+      <html lang='en' suppressHydrationWarning>
+        <body
+          className={cn(
+            'antialiased flex flex-col min-h-screen px-2',
+            roboto.variable
+          )}
+        >
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
           >
-            <ThemeProvider
-              attribute='class'
-              defaultTheme='system'
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Navbar />
-              <main className='flex-grow'>{children}</main>
-              <Footer />
-            </ThemeProvider>
-          </body>
-        </html>
-      </SessionProvider>
-    </EdgeStoreProvider>
+            <Navbar />
+
+            <main className='flex-grow'>
+              <EdgeStoreProvider>{children}</EdgeStoreProvider>
+            </main>
+            <Footer />
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

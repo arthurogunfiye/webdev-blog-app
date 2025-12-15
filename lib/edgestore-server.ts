@@ -4,11 +4,13 @@ import { createEdgeStoreNextHandler } from '@edgestore/server/adapters/next/app'
 
 const es = initEdgeStore.create();
 
-/**
- * This is the main router for the EdgeStore buckets.
- */
 const edgeStoreRouter = es.router({
-  publicFiles: es.fileBucket().beforeDelete(() => true)
+  publicFiles: es
+    .fileBucket({
+      maxSize: 10 * 1024 * 1024,
+      accept: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+    })
+    .beforeDelete(() => true)
 });
 
 export const handler = createEdgeStoreNextHandler({
