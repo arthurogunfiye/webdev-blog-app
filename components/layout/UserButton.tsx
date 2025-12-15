@@ -10,14 +10,17 @@ import {
   DropdownMenuSeparator
 } from '../ui/dropdown-menu';
 import { UserRound, User, Pencil, Shield, LogOutIcon } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 const UserButton = () => {
+  const session = useSession();
+  const imageUrl = session.data?.user?.image || '';
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src='' />
+          <AvatarImage src={imageUrl} />
           <AvatarFallback className={avatarFallbackStyles}>
             <UserRound />
           </AvatarFallback>

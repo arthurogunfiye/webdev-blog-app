@@ -12,16 +12,20 @@ import { login } from '@/actions/auth/login';
 import Alert from '../common/Alert';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LOGIN_REDIRECT } from '@/routes';
+import Link from 'next/link';
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>('');
+  const [success, setSuccess] = useState<string | undefined>('');
+
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) });
+
   const router = useRouter();
 
   const urlError =
@@ -37,8 +41,13 @@ const LoginForm = () => {
           router.replace('/login');
           setError(response.error);
         }
+
         if (!response?.error) {
           router.push(LOGIN_REDIRECT);
+        }
+
+        if (response?.success) {
+          setSuccess(response.success as string);
         }
       });
     });
@@ -65,6 +74,7 @@ const LoginForm = () => {
         defaultValue='12345Qwerty!'
       />
       {error && <Alert message={error} error />}
+      {success && <Alert message={success} success />}
       <Button
         type='submit'
         label={isPending ? 'Submitting...' : 'Login'}
@@ -72,6 +82,11 @@ const LoginForm = () => {
       />
       <div className='flex justify-center my-2'>Or</div>
       <SocialAuth />
+      <div className='flex items-end justify-end'>
+        <Link href='/password-email-form' className={linkStyles}>
+          Forgot Password?
+        </Link>
+      </div>
       {urlError && <Alert message={urlError} error />}
     </form>
   );
@@ -80,3 +95,4 @@ const LoginForm = () => {
 export default LoginForm;
 
 const formStyles = 'flex flex-col max-w-[500px] m-auto mt-8 gap-2';
+const linkStyles = 'mt-2 text-sm underline text-blue-700 dark:text-blue-300';

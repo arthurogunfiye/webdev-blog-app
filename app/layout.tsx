@@ -7,6 +7,7 @@ import Footer from '@/components/layout/Footer';
 import { ThemeProvider } from 'next-themes';
 import { auth } from '@/auth';
 import { SessionProvider } from 'next-auth/react';
+import { EdgeStoreProvider } from '@/lib/edgestore';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -29,28 +30,28 @@ type RootLayoutProps = {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await auth();
   return (
-    <SessionProvider session={session}>
-      <html lang='en' suppressHydrationWarning>
-        <body
-          className={cn(
-            'antialiased flex flex-col min-h-screen px-2',
-            roboto.variable
-          )}
-        >
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
+    <EdgeStoreProvider>
+      <SessionProvider session={session}>
+        <html lang='en' suppressHydrationWarning>
+          <body
+            className={cn(
+              'antialiased flex flex-col min-h-screen px-2',
+              roboto.variable
+            )}
           >
-            <Navbar />
-            <main className='flex-grow'>{children}</main>
-            <Footer />
-          </ThemeProvider>
-        </body>
-      </html>
-    </SessionProvider>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
+              <main className='flex-grow'>{children}</main>
+              <Footer />
+            </ThemeProvider>
+          </body>
+        </html>
+      </SessionProvider>
+    </EdgeStoreProvider>
   );
 }
-
-// Stopped at 1:46:30 in the video
