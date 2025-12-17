@@ -46,7 +46,7 @@ const AddCoverImage = ({
     return () => {
       isMounted = false;
     };
-  }, [file, edgestore, setUploadedCoverImage, replaceUrl]);
+  }, [file]);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -68,7 +68,9 @@ const AddCoverImage = ({
         className='flex items-center gap-2'
       >
         <ImageIcon size={20} />
-        <span>{!!replaceUrl ? 'Replace Cover Image' : 'Add Cover Image'}</span>
+        <span className='hover:text-red-500'>
+          {!!replaceUrl ? 'Replace Cover Image' : 'Add Cover Image'}
+        </span>
       </button>
       {isUploading && <p className='text-green-500'>Uploading image...</p>}
     </div>

@@ -77,7 +77,7 @@ const LoginForm = () => {
       {success && <Alert message={success} success />}
       <Button
         type='submit'
-        label={isPending ? 'Submitting...' : 'Login'}
+        label={isPending ? 'Logging in...' : 'Login'}
         disabled={isPending}
       />
       <div className='flex justify-center my-2'>Or</div>

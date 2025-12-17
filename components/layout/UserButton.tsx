@@ -11,10 +11,12 @@ import {
 } from '../ui/dropdown-menu';
 import { UserRound, User, Pencil, Shield, LogOutIcon } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const UserButton = () => {
   const session = useSession();
   const imageUrl = session.data?.user?.image || '';
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -34,7 +36,10 @@ const UserButton = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <button className={buttonStyles}>
+          <button
+            className={buttonStyles}
+            onClick={() => router.push('/blog/create')}
+          >
             <Pencil size={18} /> Create Post
           </button>
         </DropdownMenuItem>
