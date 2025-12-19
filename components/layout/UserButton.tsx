@@ -57,7 +57,14 @@ const UserButton = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <button className={buttonStyles} onClick={() => signOut()}>
+          <button
+            className={buttonStyles}
+            onClick={() =>
+              signOut({
+                redirectTo: '/login'
+              })
+            }
+          >
             <LogOutIcon size={18} /> Sign Out
           </button>
         </DropdownMenuItem>

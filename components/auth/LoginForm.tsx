@@ -63,6 +63,7 @@ const LoginForm = () => {
         errors={errors}
         placeholder='email'
         disabled={isPending}
+        autocomplete='username'
       />
       <FormField
         id='password'

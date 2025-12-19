@@ -9,12 +9,13 @@ import UserButton from './UserButton';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const session = useSession();
   const isUserLoggedIn = session.status === 'authenticated';
   const path = usePathname();
+  const router = useRouter();
 
   // This effect runs whenever the path or user login status changes
   useEffect(() => {
@@ -30,13 +31,12 @@ const Navbar = () => {
     <nav className={navbarStyles}>
       <Container>
         <div className={containerDivStyles}>
-          <div className={logoStyles}>
-            <Link href='/'>
-              <MdNoteAlt size={24} />
-            </Link>
-            <div className='font-bold text-xl'>
-              <Link href='/'>WEBDEV.blog</Link>
-            </div>
+          <div
+            className={logoStyles}
+            onClick={() => router.push('/blog/feed/1')}
+          >
+            <MdNoteAlt size={24} />
+            <div className='font-bold text-xl'>WEBDEV.blog</div>
           </div>
           <SearchInput />
           <div className={leftMenuStyles}>

@@ -25,7 +25,14 @@ const CoverImage = ({ url, isEditor, setUploadedCover }: CoverImageProps) => {
 
   return (
     <div className={parentDivStyles}>
-      <Image src={url} fill alt='Cover Image' className='object-cover' />
+      <Image
+        src={url}
+        fill
+        sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+        alt='Cover Image'
+        className='object-cover'
+        priority
+      />
       {isEditor && (
         <div className={isEditorStyles}>
           <AddCoverImage

@@ -16,6 +16,7 @@ interface FormFieldProps<T extends FieldValues> {
   register: UseFormRegister<T>;
   errors: FieldErrors;
   defaultValue?: string;
+  autocomplete?: string;
 }
 
 const FormField = <T extends FieldValues>({
@@ -27,7 +28,8 @@ const FormField = <T extends FieldValues>({
   inputClassNames,
   register,
   errors,
-  defaultValue
+  defaultValue,
+  autocomplete
 }: FormFieldProps<T>) => {
   const message = errors[id] && (errors[id]?.message as string);
   return (
@@ -45,6 +47,7 @@ const FormField = <T extends FieldValues>({
           inputClassNames
         )}
         defaultValue={defaultValue}
+        autoComplete={autocomplete}
       />
       {message && <span className='text-sm text-rose-400'>{message}</span>}
     </div>

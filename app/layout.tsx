@@ -11,8 +11,7 @@ import { EdgeStoreProvider } from '@/lib/edgestore';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
-  weight: ['400', '700'],
-  variable: '--font-roboto'
+  weight: ['400', '700']
 });
 
 export const metadata: Metadata = {
@@ -35,7 +34,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <body
           className={cn(
             'antialiased flex flex-col min-h-screen px-2',
-            roboto.variable
+            roboto.className
           )}
         >
           <ThemeProvider

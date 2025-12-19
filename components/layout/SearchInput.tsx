@@ -5,7 +5,11 @@ const SearchInput = () => {
   return (
     <div className='relative hidden sm:block'>
       <Search className={searchIconStyles} />
-      <Input placeholder='Search...' className={searchInputStyles} />
+      <Input
+        placeholder='Search...'
+        className={searchInputStyles}
+        id='search-input'
+      />
     </div>
   );
 };
