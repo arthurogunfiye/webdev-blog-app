@@ -9,7 +9,13 @@ const edgeStoreRouter = es.router({
   publicFiles: es
     .fileBucket({
       maxSize: 10 * 1024 * 1024,
-      accept: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+      accept: [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/webp',
+        'image/avif'
+      ]
     })
 
     .beforeUpload(async ({ ctx }) => {

@@ -4,15 +4,20 @@ import Alert from '@/components/common/Alert';
 
 interface BlogFeedProps {
   params: Promise<{ page: string }>;
+  searchParams: Promise<{
+    tag: string;
+  }>;
 }
 
-const BlogFeed = async ({ params }: BlogFeedProps) => {
+const BlogFeed = async ({ params, searchParams }: BlogFeedProps) => {
   const { page } = await params;
+  const searchObject = await searchParams;
   const currentPage = parseInt(page, 10) || 1;
 
   const { success, error } = await getPublishedBlogs({
     page: currentPage,
-    limit: 3
+    limit: 3,
+    searchObject
   });
 
   if (error) {

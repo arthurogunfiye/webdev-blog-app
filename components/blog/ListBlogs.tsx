@@ -29,12 +29,12 @@ const ListBlogs = ({
 
       <div className='flex justify-between mt-4'>
         {currentPage > 1 && (
-          <Link href={`/blog/feed/${currentPage - 1}`}>
+          <Link href={`/blog/posts/${currentPage - 1}`}>
             <span>Previous</span>
           </Link>
         )}
         {hasMoreBlogs && (
-          <Link href={`/blog/feed/${currentPage + 1}`}>
+          <Link href={`/blog/posts/${currentPage + 1}`}>
             <span>Next</span>
           </Link>
         )}

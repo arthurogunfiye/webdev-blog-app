@@ -5,7 +5,6 @@ import { PartialBlock } from '@blocknote/core';
 import { BlockNoteView } from '@blocknote/mantine';
 import { useTheme } from 'next-themes';
 import { useEdgeStore } from '@/lib/edgestore';
-import { useMemo } from 'react';
 import BlockNoteErrorBoundary from './Editor-Error-Boundary';
 
 import '@blocknote/mantine/style.css';

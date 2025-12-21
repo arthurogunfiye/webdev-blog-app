@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
+import Tags from './Tags';
 
 const Navbar = () => {
   const session = useSession();
@@ -33,7 +34,7 @@ const Navbar = () => {
         <div className={containerDivStyles}>
           <div
             className={logoStyles}
-            onClick={() => router.push('/blog/feed/1')}
+            onClick={() => router.push('/blog/posts/1')}
           >
             <MdNoteAlt size={24} />
             <div className='font-bold text-xl'>WEBDEV.blog</div>
@@ -52,6 +53,7 @@ const Navbar = () => {
           </div>
         </div>
       </Container>
+      <Tags />
     </nav>
   );
 };

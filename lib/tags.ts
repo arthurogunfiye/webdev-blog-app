@@ -5,11 +5,18 @@ export const tags: string[] = [
   'SCSS',
   'TailwindCSS',
   'JavaScript',
+  'TypeScript',
   'React',
   'Redux',
   'Next.js',
-  'TypeScript',
   'Node.js',
   'Express.js',
-  'MongoDB'
+  'MongoDB',
+  'Postgre',
+  'Prisma',
+  'SQL',
+  'Python',
+  'Angular',
+  'Vue.js',
+  'GraphQL'
 ];

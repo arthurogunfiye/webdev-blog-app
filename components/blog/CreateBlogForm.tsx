@@ -11,20 +11,20 @@ import CoverImage from './CoverImage';
 import { tags } from '@/lib/tags';
 import dynamic from 'next/dynamic';
 import Button from '../common/Button';
-import { error } from 'console';
 import Alert from '../common/Alert';
-import { set } from 'zod';
 import { createBlog } from '@/actions/blogs/create-blog';
-import { is } from 'zod/v4/locales';
+import { editBlog } from '@/actions/blogs/edit-blog';
+import { Blog } from '@prisma/client';
 
 const BlockNoteEditor = dynamic(
   () => import('../blog/editor/BlockNoteEditor').then(mod => mod.default),
   { ssr: false }
 );
 
-const CreateBlogForm = () => {
+const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
   const session = useSession();
   const userId = session.data?.user.userId;
+
   const [uploadedCover, setUploadedCover] = useState<string>();
   const [content, setContent] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | null>(null);
@@ -39,7 +39,16 @@ const CreateBlogForm = () => {
     setValue
   } = useForm<BlogSchemaType>({
     resolver: zodResolver(BlogSchema),
-    defaultValues: { userId, isPublished: false }
+    defaultValues: blog
+      ? {
+          userId: blog.userId,
+          isPublished: blog.isPublished,
+          title: blog.title,
+          coverImage: blog.coverImage || undefined,
+          tags: blog.tags,
+          content: blog.content
+        }
+      : { userId, isPublished: false }
   });
 
   useEffect(() => {
@@ -62,6 +71,12 @@ const CreateBlogForm = () => {
     }
   }, [content]);
 
+  useEffect(() => {
+    if (blog?.coverImage) {
+      setUploadedCover(blog.coverImage);
+    }
+  }, [blog?.coverImage]);
+
   const onChange = (content: string) => {
     setContent(content);
   };
@@ -75,13 +90,23 @@ const CreateBlogForm = () => {
     }
 
     startPublishing(() => {
-      createBlog({ ...formData, isPublished: true }).then(response => {
-        if (response.success) {
-          setSuccess(response.success as string);
-        } else if (response.error) {
-          setError(response.error);
-        }
-      });
+      if (blog) {
+        editBlog({ ...formData, isPublished: true }, blog.id).then(response => {
+          if (response.success) {
+            setSuccess(response.success as string);
+          } else if (response.error) {
+            setError(response.error);
+          }
+        });
+      } else {
+        createBlog({ ...formData, isPublished: true }).then(response => {
+          if (response.success) {
+            setSuccess(response.success as string);
+          } else if (response.error) {
+            setError(response.error);
+          }
+        });
+      }
     });
   };
 
@@ -89,14 +114,24 @@ const CreateBlogForm = () => {
     setSuccess('');
     setError('');
 
-    startPublishing(() => {
-      createBlog({ ...formData, isPublished: false }).then(response => {
-        if (response.success) {
-          setSuccess(response.success as string);
-        } else if (response.error) {
-          setError(response.error);
-        }
-      });
+    startSavingAsDraft(() => {
+      if (blog) {
+        editBlog({ ...formData, isPublished: true }, blog.id).then(response => {
+          if (response.success) {
+            setSuccess(response.success as string);
+          } else if (response.error) {
+            setError(response.error);
+          }
+        });
+      } else {
+        createBlog({ ...formData, isPublished: false }).then(response => {
+          if (response.success) {
+            setSuccess(response.success as string);
+          } else if (response.error) {
+            setError(response.error);
+          }
+        });
+      }
     });
   };
 
@@ -149,7 +184,10 @@ const CreateBlogForm = () => {
           )}
         </fieldset>
 
-        <BlockNoteEditor onChange={onChange} />
+        <BlockNoteEditor
+          onChange={onChange}
+          initialContent={blog?.content ? blog.content : ''}
+        />
 
         {errors.content && errors.content.message && (
           <span className={errorSpanStyles}>

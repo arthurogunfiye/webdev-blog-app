@@ -19,7 +19,7 @@ export const createBlog = async (values: BlogSchemaType) => {
     return { success: false, error: 'User not found!' };
   }
 
-  if (!isPublished && !user.emailVerified) {
+  if (isPublished && !user.emailVerified) {
     return {
       success: false,
       error: 'Please verify your email before publishing a blog.'
