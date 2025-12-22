@@ -4,8 +4,18 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Bell } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const Notifications = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Ensure the bell icon and badge only appear once the client-side session is confirmed
+  if (!mounted) return <div className='size-6 mr-2' />; // Empty space to prevent layout jump
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='relative'>

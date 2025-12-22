@@ -1,6 +1,6 @@
 import { Blog, User } from '@prisma/client';
-import Link from 'next/link';
 import BlogCard from './BlogCard';
+import Pagination from './Pagination';
 
 export type BlogWithUser = Blog & {
   user: Pick<User, 'id' | 'name' | 'image'>;
@@ -20,26 +20,25 @@ const ListBlogs = ({
   isUserProfile
 }: ListBlogsProps) => {
   return (
-    <div className={parentDivStyles}>
-      <section>
-        {blogs.map(blog => (
-          <BlogCard key={blog.id} blog={blog} isUserProfile={isUserProfile} />
-        ))}
-      </section>
+    <>
+      {blogs.length === 0 && (
+        <>
+          <p className='text-center mt-10'>
+            No blogs found that match your search or tag 😔
+          </p>
+          <p className='text-center mt-4'>Try again please...</p>
+        </>
+      )}
+      <div className={parentDivStyles}>
+        <section>
+          {blogs.map(blog => (
+            <BlogCard key={blog.id} blog={blog} isUserProfile={isUserProfile} />
+          ))}
+        </section>
 
-      <div className='flex justify-between mt-4'>
-        {currentPage > 1 && (
-          <Link href={`/blog/posts/${currentPage - 1}`}>
-            <span>Previous</span>
-          </Link>
-        )}
-        {hasMoreBlogs && (
-          <Link href={`/blog/posts/${currentPage + 1}`}>
-            <span>Next</span>
-          </Link>
-        )}
+        <Pagination currentPage={currentPage} hasMoreBlogs={hasMoreBlogs} />
       </div>
-    </div>
+    </>
   );
 };
 

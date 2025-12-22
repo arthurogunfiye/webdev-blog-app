@@ -6,6 +6,7 @@ interface BlogFeedProps {
   params: Promise<{ page: string }>;
   searchParams: Promise<{
     tag: string;
+    title: string;
   }>;
 }
 

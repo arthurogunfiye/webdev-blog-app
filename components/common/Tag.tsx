@@ -19,6 +19,7 @@ const Tag = ({ children, selected }: TagProps) => {
       router.push(`/blog/posts/1`);
     } else {
       let currentQuery = {};
+
       if (params) {
         currentQuery = queryString.parse(params.toString());
       }
@@ -35,7 +36,7 @@ const Tag = ({ children, selected }: TagProps) => {
           url: `/blog/posts/1`,
           query: updatedQuery
         },
-        { skipNull: true }
+        { skipNull: true, skipEmptyString: true }
       );
 
       // Navigate to the new URL

@@ -9,17 +9,21 @@ export const getPublishedBlogs = async ({
 }: {
   page: number;
   limit: number;
-  searchObject: { tag: string };
+  searchObject: { tag: string; title: string };
 }) => {
   const skip = (page - 1) * limit;
 
-  const { tag } = searchObject;
+  const { tag, title } = searchObject;
 
   try {
     const blogs = await db.blog.findMany({
       skip,
       take: limit,
-      where: { isPublished: true, ...(tag ? { tags: { has: tag } } : {}) },
+      where: {
+        title: { contains: title, mode: 'insensitive' },
+        isPublished: true,
+        ...(tag ? { tags: { has: tag } } : {})
+      },
       orderBy: { createdAt: 'desc' },
       include: {
         user: {
@@ -33,7 +37,11 @@ export const getPublishedBlogs = async ({
     });
 
     const totalBlogsCount = await db.blog.count({
-      where: { isPublished: true }
+      where: {
+        title: { contains: title, mode: 'insensitive' },
+        isPublished: true,
+        ...(tag ? { tags: { has: tag } } : {})
+      }
     });
 
     const hasMoreBlogs = totalBlogsCount > page * limit;

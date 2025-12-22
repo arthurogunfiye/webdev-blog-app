@@ -3,7 +3,6 @@ import { BlogWithUser } from './ListBlogs';
 import Image from 'next/image';
 import UserSummary from './UserSummary';
 import Tag from '../common/Tag';
-import { tags } from '@/lib/tags';
 import Reactions from './Reactions';
 
 const BlogCard = ({

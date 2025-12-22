@@ -12,15 +12,72 @@ import {
 import { UserRound, User, Pencil, Shield, LogOutIcon } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const UserButton = () => {
+  const [mounted, setMounted] = useState(false);
   const session = useSession();
-  const imageUrl = session.data?.user?.image || '';
   const router = useRouter();
+  const imageUrl = session.data?.user?.image || '';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent rendering until we are sure we are on the client
+  if (!mounted)
+    return <div className='size-10 rounded-full bg-muted animate-pulse' />;
+
+  // return (
+  //   <DropdownMenu>
+  //     <DropdownMenuTrigger>
+  //       <Avatar>
+  //         <AvatarImage src={imageUrl} />
+  //         <AvatarFallback className={avatarFallbackStyles}>
+  //           <UserRound />
+  //         </AvatarFallback>
+  //       </Avatar>
+  //     </DropdownMenuTrigger>
+  //     <DropdownMenuContent>
+  //       <DropdownMenuItem>
+  //         <button className={buttonStyles}>
+  //           <User size={18} /> Profile
+  //         </button>
+  //       </DropdownMenuItem>
+  //       <DropdownMenuSeparator />
+  //       <DropdownMenuItem>
+  //         <button
+  //           className={buttonStyles}
+  //           onClick={() => router.push('/blog/create')}
+  //         >
+  //           <Pencil size={18} /> Create Post
+  //         </button>
+  //       </DropdownMenuItem>
+  //       <DropdownMenuSeparator />
+  //       <DropdownMenuItem>
+  //         <button className={buttonStyles}>
+  //           <FaRegBookmark size={16} /> Bookmark
+  //         </button>
+  //       </DropdownMenuItem>
+  //       <DropdownMenuSeparator />
+  //       <DropdownMenuItem>
+  //         <button className={buttonStyles}>
+  //           <Shield size={18} /> Admin
+  //         </button>
+  //       </DropdownMenuItem>
+  //       <DropdownMenuSeparator />
+  //       <DropdownMenuItem>
+  //         <button className={buttonStyles} onClick={() => signOut()}>
+  //           <LogOutIcon size={18} /> Sign Out
+  //         </button>
+  //       </DropdownMenuItem>
+  //     </DropdownMenuContent>
+  //   </DropdownMenu>
+  // );
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className='outline-none'>
         <Avatar>
           <AvatarImage src={imageUrl} />
           <AvatarFallback className={avatarFallbackStyles}>
@@ -28,45 +85,25 @@ const UserButton = () => {
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>
-          <button className={buttonStyles}>
-            <User size={18} /> Profile
-          </button>
+      <DropdownMenuContent align='end' className='w-48'>
+        <DropdownMenuItem onClick={() => router.push('/profile')}>
+          <User size={18} className='mr-2' /> Profile
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => router.push('/blog/create')}>
+          <Pencil size={18} className='mr-2' /> Create Post
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <button
-            className={buttonStyles}
-            onClick={() => router.push('/blog/create')}
-          >
-            <Pencil size={18} /> Create Post
-          </button>
+          <FaRegBookmark size={16} className='mr-2' /> Bookmark
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <button className={buttonStyles}>
-            <FaRegBookmark size={16} /> Bookmark
-          </button>
+        <DropdownMenuItem onClick={() => router.push('/admin')}>
+          <Shield size={18} className='mr-2' /> Admin
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <button className={buttonStyles}>
-            <Shield size={18} /> Admin
-          </button>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <button
-            className={buttonStyles}
-            onClick={() =>
-              signOut({
-                redirectTo: '/login'
-              })
-            }
-          >
-            <LogOutIcon size={18} /> Sign Out
-          </button>
+        <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
+          <LogOutIcon size={18} className='mr-2' /> Sign Out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -54,6 +54,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }
   },
   pages: {
-    signIn: '/login'
+    signIn: '/login' // Redirects here if Middleware finds no session
   }
 });

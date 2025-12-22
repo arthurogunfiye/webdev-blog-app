@@ -13,20 +13,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import Tags from './Tags';
 
 const Navbar = () => {
-  const session = useSession();
-  const isUserLoggedIn = session.status === 'authenticated';
-  const path = usePathname();
+  const { status } = useSession();
   const router = useRouter();
-
-  // This effect runs whenever the path or user login status changes
-  useEffect(() => {
-    if (!isUserLoggedIn && path) {
-      const updateSession = async () => {
-        await session.update();
-      };
-      updateSession();
-    }
-  }, [path, isUserLoggedIn]);
 
   return (
     <nav className={navbarStyles}>
@@ -42,9 +30,14 @@ const Navbar = () => {
           <SearchInput />
           <div className={leftMenuStyles}>
             <ThemeToggle />
-            {isUserLoggedIn && <Notifications />}
-            {isUserLoggedIn && <UserButton />}
-            {!isUserLoggedIn && (
+            {status === 'loading' ? (
+              <div className={loadingStateStyles}></div>
+            ) : status === 'authenticated' ? (
+              <>
+                <Notifications />
+                <UserButton />
+              </>
+            ) : (
               <>
                 <Link href='/login'>Login</Link>
                 <Link href='/register'>Register</Link>
@@ -60,6 +53,7 @@ const Navbar = () => {
 
 export default Navbar;
 
+const loadingStateStyles = 'size-10 rounded-full bg-slate-200 animate-pulse';
 const navbarStyles = 'sticky top-0 border-b z-50 bg-white dark:bg-slate-950';
 const containerDivStyles = 'flex justify-between items-center gap-8';
 const logoStyles = 'flex items-center gap-1 cursor-pointer';
