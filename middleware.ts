@@ -6,12 +6,18 @@ import {
   publicRoutes
 } from './routes';
 
+const checkIsThisAPublicRoute = (pathname: string) => {
+  return publicRoutes.some(route =>
+    typeof route === 'string' ? route === pathname : route.test(pathname)
+  );
+};
+
 export default auth(req => {
   const { nextUrl } = req;
   const isUserLoggedIn = !!req.auth;
   const isThisAnApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isEdgeStoreRoute = nextUrl.pathname.startsWith('/api/edgestore');
-  const isThisAPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isThisAPublicRoute = checkIsThisAPublicRoute(nextUrl.pathname);
   const isThisAnAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   if (isThisAnApiAuthRoute || isEdgeStoreRoute) {
