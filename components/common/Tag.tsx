@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import { useCallback } from 'react';
 
 interface TagProps {
-  children: React.ReactNode;
+  children: string;
   selected?: boolean;
 }
 
@@ -25,7 +25,7 @@ const Tag = ({ children, selected }: TagProps) => {
       }
 
       // Update tag in query parameters
-      const updatedQuery: any = {
+      const updatedQuery = {
         ...currentQuery,
         tag: children
       };

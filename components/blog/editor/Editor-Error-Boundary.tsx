@@ -15,6 +15,7 @@ class BlockNoteErrorBoundary extends Component<Props, State> {
   public state: State = { hasError: false };
 
   public static getDerivedStateFromError(_: Error): State {
+    console.log('Unused variable>>> ', _);
     return { hasError: true };
   }
 

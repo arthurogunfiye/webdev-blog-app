@@ -30,9 +30,9 @@ const SearchInput = () => {
     }
 
     // Set the input value based on the title query parameter
-    const updatedQuery: any = {
+    const updatedQuery = {
       ...currentQuery,
-      title: debounceValue
+      title: debounceValue as string
     };
 
     // Remove page number when changing tag
@@ -46,7 +46,7 @@ const SearchInput = () => {
 
     // Navigate to the new URL
     router.push(url);
-  }, [debounceValue]);
+  }, [debounceValue, mounted, params, router]);
 
   const handleOnchange: ChangeEventHandler<HTMLInputElement> = event => {
     setValue(event.target.value);

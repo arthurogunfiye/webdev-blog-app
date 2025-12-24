@@ -7,9 +7,8 @@ import SearchInput from './SearchInput';
 import Notifications from './Notifications';
 import UserButton from './UserButton';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Tags from './Tags';
 
 const Navbar = () => {

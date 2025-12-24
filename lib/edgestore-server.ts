@@ -18,7 +18,7 @@ const edgeStoreRouter = es.router({
       ]
     })
 
-    .beforeUpload(async ({ ctx }) => {
+    .beforeUpload(async () => {
       const session = await auth();
       if (!session) {
         throw new Error('Unauthorized'); // EdgeStore handles this as a 401

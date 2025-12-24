@@ -66,4 +66,3 @@ const UserButton = () => {
 export default UserButton;
 
 const avatarFallbackStyles = 'border-2 border-slate-500 dark:border-slate-50';
-const buttonStyles = 'flex items-center gap-2';

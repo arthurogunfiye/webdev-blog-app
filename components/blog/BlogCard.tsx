@@ -12,6 +12,8 @@ const BlogCard = ({
   blog: BlogWithUser;
   isUserProfile?: boolean;
 }) => {
+  console.log('Check user profile status>>> ', isUserProfile);
+
   return (
     <div className={parentDivStyles}>
       <div>

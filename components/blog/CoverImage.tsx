@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 import { useEdgeStore } from '@/lib/edgestore';
 
 interface CoverImageProps {
-  setUploadedCover: (cover: string) => void;
+  setUploadedCover: (cover: string | undefined) => void;
   url: string;
   isEditor?: boolean;
 }
@@ -17,7 +17,7 @@ const CoverImage = ({ url, isEditor, setUploadedCover }: CoverImageProps) => {
   const handleRemoveCover = async (url: string) => {
     try {
       await edgestore.publicFiles.delete({ url });
-      setUploadedCover(undefined as unknown as string);
+      setUploadedCover(undefined);
     } catch (error) {
       console.log(error);
     }

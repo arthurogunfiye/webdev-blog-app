@@ -59,7 +59,7 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
         shouldTouch: true
       });
     }
-  }, [uploadedCover]);
+  }, [uploadedCover, setValue]);
 
   useEffect(() => {
     if (typeof content === 'string') {
@@ -69,7 +69,7 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
         shouldTouch: true
       });
     }
-  }, [content]);
+  }, [content, setValue]);
 
   useEffect(() => {
     if (blog?.coverImage) {
