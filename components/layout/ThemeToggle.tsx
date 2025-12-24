@@ -24,8 +24,6 @@ const ThemeToggle = () => {
 
   return (
     <button onClick={toggleTheme}>
-      {/* <Sun className='hidden dark:block' />
-      <Moon className='block dark:hidden' /> */}
       {theme === 'light' ? <Moon /> : <Sun />}
     </button>
   );

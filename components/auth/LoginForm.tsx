@@ -43,7 +43,6 @@ const LoginForm = () => {
         }
 
         if (!response?.error) {
-          // router.push(LOGIN_REDIRECT);
           window.location.assign(LOGIN_REDIRECT);
         }
 

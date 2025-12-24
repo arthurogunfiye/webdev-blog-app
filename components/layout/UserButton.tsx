@@ -28,53 +28,6 @@ const UserButton = () => {
   if (!mounted)
     return <div className='size-10 rounded-full bg-muted animate-pulse' />;
 
-  // return (
-  //   <DropdownMenu>
-  //     <DropdownMenuTrigger>
-  //       <Avatar>
-  //         <AvatarImage src={imageUrl} />
-  //         <AvatarFallback className={avatarFallbackStyles}>
-  //           <UserRound />
-  //         </AvatarFallback>
-  //       </Avatar>
-  //     </DropdownMenuTrigger>
-  //     <DropdownMenuContent>
-  //       <DropdownMenuItem>
-  //         <button className={buttonStyles}>
-  //           <User size={18} /> Profile
-  //         </button>
-  //       </DropdownMenuItem>
-  //       <DropdownMenuSeparator />
-  //       <DropdownMenuItem>
-  //         <button
-  //           className={buttonStyles}
-  //           onClick={() => router.push('/blog/create')}
-  //         >
-  //           <Pencil size={18} /> Create Post
-  //         </button>
-  //       </DropdownMenuItem>
-  //       <DropdownMenuSeparator />
-  //       <DropdownMenuItem>
-  //         <button className={buttonStyles}>
-  //           <FaRegBookmark size={16} /> Bookmark
-  //         </button>
-  //       </DropdownMenuItem>
-  //       <DropdownMenuSeparator />
-  //       <DropdownMenuItem>
-  //         <button className={buttonStyles}>
-  //           <Shield size={18} /> Admin
-  //         </button>
-  //       </DropdownMenuItem>
-  //       <DropdownMenuSeparator />
-  //       <DropdownMenuItem>
-  //         <button className={buttonStyles} onClick={() => signOut()}>
-  //           <LogOutIcon size={18} /> Sign Out
-  //         </button>
-  //       </DropdownMenuItem>
-  //     </DropdownMenuContent>
-  //   </DropdownMenu>
-  // );
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none'>
