@@ -14,22 +14,32 @@ interface ListBlogsProps {
   hasMoreBlogs: boolean;
   currentPage: number;
   isUserProfile?: boolean;
+  page: string;
 }
 
 const ListBlogs = ({
   blogs,
   hasMoreBlogs,
   currentPage,
-  isUserProfile
+  isUserProfile,
+  page
 }: ListBlogsProps) => {
   return (
     <>
-      {blogs.length === 0 && (
+      {page === 'blogsListPage' && blogs.length === 0 && (
         <>
           <p className='text-center mt-10'>
             No blogs found that match your search or tag 😔
           </p>
           <p className='text-center mt-4'>Try again please...</p>
+        </>
+      )}
+      {page === 'bookmarksListPage' && blogs.length === 0 && (
+        <>
+          <p className='text-center mt-10'>
+            You do not have any blogs bookmarked
+          </p>
+          <p className='text-center mt-4'>Go bookmark some blogs 😊</p>
         </>
       )}
       <div className={parentDivStyles}>
@@ -39,7 +49,11 @@ const ListBlogs = ({
           ))}
         </section>
 
-        <Pagination currentPage={currentPage} hasMoreBlogs={hasMoreBlogs} />
+        <Pagination
+          currentPage={currentPage}
+          hasMoreBlogs={hasMoreBlogs}
+          page={page}
+        />
       </div>
     </>
   );

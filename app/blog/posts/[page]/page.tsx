@@ -37,6 +37,7 @@ const BlogFeed = async ({ params, searchParams }: BlogFeedProps) => {
         blogs={blogs}
         hasMoreBlogs={hasMoreBlogs}
         currentPage={currentPage}
+        page='blogsListPage'
       />
     </div>
   );

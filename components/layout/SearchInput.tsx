@@ -46,7 +46,7 @@ const SearchInput = () => {
 
     // Navigate to the new URL
     router.push(url);
-  }, [debounceValue, mounted, params, router]);
+  }, [debounceValue]);
 
   const handleOnchange: ChangeEventHandler<HTMLInputElement> = event => {
     setValue(event.target.value);

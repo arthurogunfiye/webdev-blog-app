@@ -47,8 +47,8 @@ const UserButton = () => {
           <Pencil size={18} className='mr-2' /> Create Post
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <FaRegBookmark size={16} className='mr-2' /> Bookmark
+        <DropdownMenuItem onClick={() => router.push('/blog/bookmarks/1')}>
+          <FaRegBookmark size={16} className='mr-2' /> Bookmarks
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => router.push('/admin')}>
