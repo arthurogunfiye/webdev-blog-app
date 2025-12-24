@@ -24,6 +24,10 @@ export const getBlogById = async ({ blogId }: { blogId: string }) => {
         claps: {
           where: { userId },
           select: { id: true }
+        },
+        bookmarks: {
+          where: { userId },
+          select: { id: true }
         }
       }
     });

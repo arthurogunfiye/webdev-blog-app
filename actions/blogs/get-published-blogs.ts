@@ -41,6 +41,10 @@ export const getPublishedBlogs = async ({
         claps: {
           where: { userId },
           select: { id: true }
+        },
+        bookmarks: {
+          where: { userId },
+          select: { id: true }
         }
       }
     });
