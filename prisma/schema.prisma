@@ -15,6 +15,7 @@ model User {
   image         String?
   accounts      Account[]
   blogs         Blog[]
+  claps         Clap[]
 
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -76,5 +77,18 @@ model Blog {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   tags            String[]
+  claps           Clap[]
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Clap {
+  id            String    @id @default(cuid())
+  userId        String
+  blogId        String
+  createdAt     DateTime  @default(now())
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blog          Blog      @relation(fields: [blogId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, blogId])
 }

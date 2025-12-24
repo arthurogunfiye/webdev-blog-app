@@ -1,13 +1,40 @@
+'use client';
+
 import { PiHandsClapping } from 'react-icons/pi';
 import { FaRegBookmark, FaRegComment } from 'react-icons/fa';
+import { FaHandsClapping } from 'react-icons/fa6';
+import { useState } from 'react';
+import { BlogWithUser } from './ListBlogs';
+import { useSession } from 'next-auth/react';
+import { clapBlog } from '@/actions/blogs/clap-blog';
+import { useRouter } from 'next/navigation';
 
-const Reactions = () => {
+const Reactions = ({ blog }: { blog: BlogWithUser }) => {
+  const session = useSession();
+  const userId = session.data?.user.userId;
+  const [clapCount, setClapCount] = useState(blog._count.claps);
+  const [userHasClapped, setUserHasClapped] = useState(!!blog.claps.length);
+  const router = useRouter();
+
+  const handleClap = async () => {
+    if (!userId) return;
+    setClapCount(prevCount => (userHasClapped ? prevCount - 1 : prevCount + 1));
+    setUserHasClapped(prevState => !prevState);
+
+    await clapBlog(blog.id, userId);
+    router.refresh();
+  };
+
   return (
     <div className={parentDivStyles}>
       <div className='flex items-center gap-4'>
-        <span className={clappingSpanStyles}>
-          <PiHandsClapping size={20} />
-          {7}
+        <span className={clappingSpanStyles} onClick={handleClap}>
+          {userHasClapped ? (
+            <FaHandsClapping size={20} />
+          ) : (
+            <PiHandsClapping size={20} />
+          )}
+          {clapCount}
         </span>
         <span className={commentSpanStyles}>
           <FaRegComment size={18} />
