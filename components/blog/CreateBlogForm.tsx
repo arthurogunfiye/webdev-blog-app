@@ -15,6 +15,7 @@ import Alert from '../common/Alert';
 import { createBlog } from '@/actions/blogs/create-blog';
 import { editBlog } from '@/actions/blogs/edit-blog';
 import { Blog } from '@prisma/client';
+import { toast } from 'react-hot-toast';
 
 const BlockNoteEditor = dynamic(
   () => import('../blog/editor/BlockNoteEditor').then(mod => mod.default),
@@ -93,16 +94,20 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
       if (blog) {
         editBlog({ ...formData, isPublished: true }, blog.id).then(response => {
           if (response.success) {
+            toast.success(response.success as string);
             setSuccess(response.success as string);
           } else if (response.error) {
+            toast.error(response.error);
             setError(response.error);
           }
         });
       } else {
         createBlog({ ...formData, isPublished: true }).then(response => {
           if (response.success) {
+            toast.success(response.success as string);
             setSuccess(response.success as string);
           } else if (response.error) {
+            toast.error(response.error);
             setError(response.error);
           }
         });
@@ -126,8 +131,10 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
       } else {
         createBlog({ ...formData, isPublished: false }).then(response => {
           if (response.success) {
+            toast.success(response.success as string);
             setSuccess(response.success as string);
           } else if (response.error) {
+            toast.error(response.error);
             setError(response.error);
           }
         });

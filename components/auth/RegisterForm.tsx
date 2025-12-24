@@ -10,6 +10,7 @@ import { RegisterSchema, RegisterSchemaType } from '@/schemas/RegisterSchema';
 import { signUp } from '@/actions/auth/register';
 import { useState, useTransition } from 'react';
 import Alert from '../common/Alert';
+import { toast } from 'react-hot-toast';
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -28,6 +29,7 @@ const RegisterForm = () => {
     startTransition(() => {
       signUp(data).then(response => {
         setError(response.error);
+        toast.success(response.success as string);
         setSuccess(response.success ? 'Verification Email Sent!' : undefined);
       });
     });

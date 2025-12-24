@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Button from '../common/Button';
 import TextAreaField from '../common/TextAreaField';
 import { addComment } from '@/actions/comments/add-comments';
+import { toast } from 'react-hot-toast';
 
 interface IAddCommentProps {
   blogId: string;
@@ -44,8 +45,9 @@ const AddCommentsForm = ({
         parentId,
         repliedToUserId: repliedToId
       }).then(response => {
-        if (response.error) return console.log('Error: ', response.error);
+        if (response.error) return toast.error(response.error);
         if (response.success) {
+          toast.success(response.success);
           reset();
         }
       });

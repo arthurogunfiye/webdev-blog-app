@@ -13,6 +13,7 @@ import Alert from '../common/Alert';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LOGIN_REDIRECT } from '@/routes';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -38,6 +39,7 @@ const LoginForm = () => {
     startTransition(() => {
       login(data).then(response => {
         if (response?.error) {
+          toast.error(response.error);
           router.replace('/login');
           setError(response.error);
         }
@@ -47,6 +49,7 @@ const LoginForm = () => {
         }
 
         if (response?.success) {
+          toast.success(response.success as string);
           setSuccess(response.success as string);
         }
       });

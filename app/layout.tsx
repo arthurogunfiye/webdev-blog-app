@@ -8,6 +8,7 @@ import { ThemeProvider } from 'next-themes';
 import { auth } from '@/auth';
 import { SessionProvider } from 'next-auth/react';
 import { EdgeStoreProvider } from '@/lib/edgestore';
+import { Toaster } from 'react-hot-toast';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -37,6 +38,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             roboto.className
           )}
         >
+          <Toaster
+            position='top-center'
+            toastOptions={{
+              style: { background: 'rgb(51 65 85)', color: '#fff' }
+            }}
+          />
           <ThemeProvider
             attribute='class'
             defaultTheme='system'
