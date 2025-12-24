@@ -9,6 +9,7 @@ import Reactions from '@/components/blog/Reactions';
 import Tag from '@/components/common/Tag';
 import BlockNoteEditor from '@/components/blog/editor/BlockNoteEditorWrapper';
 import './editor.css';
+import Comments from '@/components/comments/Comments';
 
 interface BlogContentProps {
   params: Promise<{ id: string }>;
@@ -71,6 +72,8 @@ const BlogContent = async ({ params }: BlogContentProps) => {
       <div>
         <BlockNoteEditor editable={false} initialContent={blog.content} />
       </div>
+      <Separator />
+      <Comments blog={blog} />
     </div>
   );
 };
