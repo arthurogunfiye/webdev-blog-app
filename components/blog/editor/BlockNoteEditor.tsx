@@ -30,27 +30,12 @@ const BlockNoteEditor = ({
     return response.url;
   };
 
-  // const parsedContent = useMemo(() => {
-  //   if (!initialContent) return undefined;
-  //   try {
-  //     return JSON.parse(initialContent) as PartialBlock[];
-  //   } catch (e) {
-  //     console.error('Invalid JSON content provided to BlockNote', e);
-  //     return undefined;
-  //   }
-  // }, [initialContent]);
-
   const editor = useCreateBlockNote({
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
     uploadFile: handleImgUpload
   });
-
-  // const editor = useCreateBlockNote({
-  //   initialContent: parsedContent,
-  //   uploadFile: handleImgUpload
-  // });
 
   if (!editor) {
     return (

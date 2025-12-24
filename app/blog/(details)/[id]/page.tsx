@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import Reactions from '@/components/blog/Reactions';
 import Tag from '@/components/common/Tag';
-import BlockNoteEditor from '@/components/blog/editor/BlockNoteEditor';
+import BlockNoteEditor from '@/components/blog/editor/BlockNoteEditorWrapper';
 import './editor.css';
 
 interface BlogContentProps {
