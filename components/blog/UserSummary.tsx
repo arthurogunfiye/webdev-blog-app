@@ -11,7 +11,7 @@ export interface UserSummaryProps {
 
 const UserSummary = ({ user, createdDate }: UserSummaryProps) => {
   return (
-    <Link href={`/user/${user.id}/1`} className={linkStyles}>
+    <Link href={`/user/${user.id}`} className={linkStyles}>
       <Avatar className='size-6'>
         <AvatarImage src={user?.image || ''} />
         <AvatarFallback className={avatarFallbackStyles}>
