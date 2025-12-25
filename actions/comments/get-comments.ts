@@ -32,9 +32,13 @@ export const getComments = async (
         },
         _count: {
           select: {
-            replies: true
-            // claps: true
+            replies: true,
+            claps: true
           }
+        },
+        claps: {
+          where: { userId },
+          select: { id: true }
         }
       }
     });
