@@ -2,10 +2,14 @@ import { auth } from '@/auth';
 import { BlogWithUser } from '../blog/ListBlogs';
 import Heading from '../common/Heading';
 import AddCommentsForm from './AddCommentsForm';
+import ListComments from './ListComments';
+import { getComments } from '@/actions/comments/get-comments';
 
 const Comments = async ({ blog }: { blog: BlogWithUser }) => {
   const session = await auth();
   const userId = session?.user.userId;
+
+  const { success } = await getComments(blog.id, null, userId);
 
   return (
     <div>
@@ -16,6 +20,9 @@ const Comments = async ({ blog }: { blog: BlogWithUser }) => {
           userId={userId}
           creatorId={blog.userId}
         />
+      )}
+      {!!success?.comments.length && (
+        <ListComments comments={success.comments} />
       )}
     </div>
   );
