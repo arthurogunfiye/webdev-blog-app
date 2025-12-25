@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 interface CommentReactionsProps {
   comment: CommentWithUser;
   setShowForm: Dispatch<SetStateAction<boolean>>;
-  setShowReplies: Dispatch<SetStateAction<boolean>>;
+  setShowReplies?: Dispatch<SetStateAction<boolean>>;
   isThisAReply?: boolean;
 }
 
@@ -29,6 +29,12 @@ const CommentReactions = ({
     setShowForm(previousState => !previousState);
   };
 
+  const handleShowReplies = () => {
+    if (setShowReplies) {
+      setShowReplies(previousState => !previousState);
+    }
+  };
+
   return (
     <div className={cn(parentDivStyles, isThisAReply && 'justify-start')}>
       <div className='flex items-center gap-4'>
@@ -36,7 +42,7 @@ const CommentReactions = ({
           <FaHandsClapping size={20} /> {4}
         </span>
         {!isThisAReply && (
-          <span className={spanStyles}>
+          <span className={spanStyles} onClick={handleShowReplies}>
             <FaRegComment size={20} />
             Replies {comment._count.replies}
           </span>
