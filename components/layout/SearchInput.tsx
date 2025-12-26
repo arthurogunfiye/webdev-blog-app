@@ -32,7 +32,7 @@ const SearchInput = () => {
     // Set the input value based on the title query parameter
     const updatedQuery = {
       ...currentQuery,
-      title: debounceValue as string
+      title: debounceValue
     };
 
     // Remove page number when changing tag

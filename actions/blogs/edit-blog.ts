@@ -16,12 +16,11 @@ export const editBlog = async (data: BlogSchemaType, blogId: string) => {
   const user = await getUserById(userId);
 
   if (!user) {
-    return { success: false, error: 'User not found!' };
+    return { error: 'User not found!' };
   }
 
   if (isPublished && !user.emailVerified) {
     return {
-      success: false,
       error: 'Please verify your email before publishing a blog.'
     };
   }
@@ -31,7 +30,7 @@ export const editBlog = async (data: BlogSchemaType, blogId: string) => {
   });
 
   if (!blog) {
-    return { success: false, error: 'Blog not found!' };
+    return { error: 'Blog not found!' };
   }
 
   await db.blog.update({

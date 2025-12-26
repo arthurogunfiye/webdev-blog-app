@@ -15,7 +15,7 @@ export const login = async (formData: LoginSchemaType) => {
 
   // Validate input fields
   if (!validateFields.success) {
-    return { success: false, error: 'Invalid fields!' };
+    return { error: 'Invalid fields!' };
   }
 
   const { email, password } = validateFields.data;
@@ -25,7 +25,7 @@ export const login = async (formData: LoginSchemaType) => {
 
   // Check if user exists and has password
   if (!user || !email || !password || !user.password) {
-    return { success: false, error: 'Invalid credentials' };
+    return { error: 'Invalid credentials' };
   }
 
   // Check if email is verified
@@ -59,9 +59,9 @@ export const login = async (formData: LoginSchemaType) => {
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return { success: false, error: 'Invalid credentials' };
+          return { error: 'Invalid credentials' };
         default:
-          return { success: false, error: 'Something went wrong' };
+          return { error: 'Something went wrong' };
       }
     }
   }

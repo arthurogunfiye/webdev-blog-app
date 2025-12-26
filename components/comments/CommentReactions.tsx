@@ -43,7 +43,7 @@ const CommentReactions = ({
 
   const handleDelete = async () => {
     if (userId) {
-      const response = await deleteComment(comment.id, userId);
+      const response = await deleteComment(comment.id);
 
       if (response.error) {
         toast.error(response.error);

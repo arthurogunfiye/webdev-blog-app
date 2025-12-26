@@ -14,7 +14,7 @@ export const passwordEmail = async (formData: PasswordEmailSchemaType) => {
   const validateFields = PasswordEmailSchema.safeParse(formData);
 
   if (!validateFields.success) {
-    return { success: false, error: 'Invalid Email' };
+    return { error: 'Invalid Email' };
   }
 
   const { email } = validateFields.data;
@@ -22,7 +22,7 @@ export const passwordEmail = async (formData: PasswordEmailSchemaType) => {
   const user = await getUserByEmail(email);
 
   if (!user || !user.email) {
-    return { success: false, error: 'No account found with that email' };
+    return { error: 'No account found with that email' };
   }
 
   const passwordResetToken = await generatePasswordResetToken(email);
@@ -33,7 +33,7 @@ export const passwordEmail = async (formData: PasswordEmailSchemaType) => {
   );
 
   if (error) {
-    return { success: false, error: 'Failed to send password reset email' };
+    return { error: 'Failed to send password reset email' };
   }
 
   return {

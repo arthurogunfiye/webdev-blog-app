@@ -8,7 +8,7 @@ export const createBlog = async (values: BlogSchemaType) => {
   const validatedFields = BlogSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { success: false, error: 'Invalid blog fields!' };
+    return { error: 'Invalid blog fields!' };
   }
 
   const { userId, isPublished } = validatedFields.data;
@@ -16,12 +16,11 @@ export const createBlog = async (values: BlogSchemaType) => {
   const user = await getUserById(userId);
 
   if (!user) {
-    return { success: false, error: 'User not found!' };
+    return { error: 'User not found!' };
   }
 
   if (isPublished && !user.emailVerified) {
     return {
-      success: false,
       error: 'Please verify your email before publishing a blog.'
     };
   }

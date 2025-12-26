@@ -35,7 +35,7 @@ const PasswordEmailForm = () => {
         }
 
         if (response?.success) {
-          setSuccess(response.success as string);
+          setSuccess(response.success);
         }
       });
     });

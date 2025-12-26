@@ -29,7 +29,7 @@ const AddCoverImage = ({
           file,
           options: replaceUrl ? { replaceTargetUrl: replaceUrl } : undefined
         });
-        if (isMounted) {
+        if (isMounted && response.url) {
           setUploadedCoverImage(response.url);
         }
       } catch (error) {
@@ -46,7 +46,7 @@ const AddCoverImage = ({
     return () => {
       isMounted = false;
     };
-  }, [file, edgestore.publicFiles, replaceUrl, setUploadedCoverImage]);
+  }, [file]);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

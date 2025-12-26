@@ -16,6 +16,9 @@ import { createBlog } from '@/actions/blogs/create-blog';
 import { editBlog } from '@/actions/blogs/edit-blog';
 import { Blog } from '@prisma/client';
 import { toast } from 'react-hot-toast';
+import { useEdgeStore } from '@/lib/edgestore';
+import { deleteBlog } from '@/actions/blogs/delete-blog';
+import { useRouter } from 'next/navigation';
 
 const BlockNoteEditor = dynamic(
   () => import('../blog/editor/BlockNoteEditor').then(mod => mod.default),
@@ -32,6 +35,9 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
   const [error, setError] = useState<string | null>(null);
   const [isPublishing, startPublishing] = useTransition();
   const [isSavingAsDraft, startSavingAsDraft] = useTransition();
+  const [isDeleting, startDeleting] = useTransition();
+  const { edgestore } = useEdgeStore();
+  const router = useRouter();
 
   const {
     register,
@@ -91,21 +97,29 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
     }
 
     startPublishing(() => {
+      const finalData = {
+        ...formData,
+        isPublished: true
+      };
+
       if (blog) {
-        editBlog({ ...formData, isPublished: true }, blog.id).then(response => {
-          if (response.success) {
-            toast.success(response.success as string);
-            setSuccess(response.success as string);
+        editBlog(finalData, blog.id).then(response => {
+          if (response.success && uploadedCover) {
+            edgestore.publicFiles.confirmUpload({
+              url: uploadedCover
+            });
+            toast.success(response.success, { duration: 3000 });
+            setSuccess(response.success);
           } else if (response.error) {
             toast.error(response.error);
             setError(response.error);
           }
         });
       } else {
-        createBlog({ ...formData, isPublished: true }).then(response => {
+        createBlog(finalData).then(response => {
           if (response.success) {
-            toast.success(response.success as string);
-            setSuccess(response.success as string);
+            toast.success(response.success, { duration: 3000 });
+            setSuccess(response.success);
           } else if (response.error) {
             toast.error(response.error);
             setError(response.error);
@@ -120,24 +134,55 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
     setError('');
 
     startSavingAsDraft(() => {
+      const finalData = {
+        ...formData,
+        isPublished: false
+      };
+
       if (blog) {
-        editBlog({ ...formData, isPublished: true }, blog.id).then(response => {
-          if (response.success) {
-            setSuccess(response.success as string);
+        editBlog(finalData, blog.id).then(response => {
+          if (response.success && uploadedCover) {
+            edgestore.publicFiles.confirmUpload({
+              url: uploadedCover
+            });
+            setSuccess(response.success);
           } else if (response.error) {
             setError(response.error);
           }
         });
       } else {
-        createBlog({ ...formData, isPublished: false }).then(response => {
+        createBlog(finalData).then(response => {
           if (response.success) {
-            toast.success(response.success as string);
-            setSuccess(response.success as string);
+            toast.success(response.success);
+            setSuccess(response.success);
           } else if (response.error) {
             toast.error(response.error);
             setError(response.error);
           }
         });
+      }
+    });
+  };
+
+  const onDelete: SubmitHandler<BlogSchemaType> = data => {
+    setSuccess('');
+    setError('');
+    startDeleting(async () => {
+      if (data.coverImage) {
+        await edgestore.publicFiles.delete({ url: data.coverImage });
+      }
+      if (blog) {
+        deleteBlog(blog.id).then(response => {
+          if (response.error) {
+            setError(response.error);
+          }
+          if (response.success) {
+            toast.success('Blog deleted', { duration: 3000 });
+            setSuccess(response.success);
+          }
+        });
+
+        router.push('/blog/posts/1');
       }
     });
   };
@@ -210,9 +255,16 @@ const CreateBlogForm = ({ blog }: { blog?: Blog }) => {
         {success && <Alert message={success} success />}
         {error && <Alert message={error} error />}
         <div className='flex items-center justify-between gap-6'>
-          <div>
-            <Button type='button' label='Delete' className='bg-red-800' />
-          </div>
+          {blog && (
+            <div>
+              <Button
+                type='button'
+                label={isDeleting ? 'Deleting...' : 'Delete'}
+                className='bg-red-800'
+                onClick={handleSubmit(onDelete)}
+              />
+            </div>
+          )}
           <div className='flex gap-4'>
             <Button
               type='submit'
@@ -238,13 +290,8 @@ export default CreateBlogForm;
 
 const formStyles =
   'flex flex-col justify-between max-w-[1200px] m-auto min-h-[85vh]';
-
 const inputFieldStyles = 'border-none text-5xl font-bold bg-transparent px-0';
-
 const fieldsetStyles = 'flex flex-col border-y mb-4 py-2';
-
 const tagDivStyles = 'flex gap-4 flex-wrap w-full';
-
 const tagLabelStyles = 'flex items-center space-x-2';
-
 const errorSpanStyles = 'text-sm text-rose-400';

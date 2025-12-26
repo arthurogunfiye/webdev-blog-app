@@ -13,15 +13,15 @@ export const signUp = async (formData: RegisterSchemaType) => {
   const validateFields = RegisterSchema.safeParse(formData);
 
   if (!validateFields.success) {
-    return { success: false, error: 'Invalid fields!' };
+    return { error: 'Invalid fields!' };
   }
 
   const { name, email, password } = validateFields.data;
 
   const user = await getUserByEmail(email);
 
-  if (user) {
-    return { success: false, error: 'User already exists!' };
+  if (!user) {
+    return { error: 'User already exists!' };
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

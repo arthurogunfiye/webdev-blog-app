@@ -49,8 +49,8 @@ const LoginForm = () => {
         }
 
         if (response?.success) {
-          toast.success(response.success as string);
-          setSuccess(response.success as string);
+          toast.success(response.success);
+          setSuccess(response.success);
         }
       });
     });
