@@ -37,7 +37,7 @@ export const getPublishedBlogs = async ({
             image: true
           }
         },
-        _count: { select: { claps: true } },
+        _count: { select: { claps: true, comments: true } },
         claps: {
           where: { userId },
           select: { id: true }
