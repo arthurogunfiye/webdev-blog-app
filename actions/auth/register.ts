@@ -20,7 +20,7 @@ export const signUp = async (formData: RegisterSchemaType) => {
 
   const user = await getUserByEmail(email);
 
-  if (!user) {
+  if (user) {
     return { error: 'User already exists!' };
   }
 

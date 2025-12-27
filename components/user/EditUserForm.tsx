@@ -14,6 +14,8 @@ import Alert from '../common/Alert';
 import { User } from '@prisma/client';
 import { editUser } from '@/actions/users/edit-user';
 import { tags } from '@/lib/tags';
+import { deleteUser } from '@/actions/users/delete-user';
+import { signOut } from 'next-auth/react';
 
 const EditUserForm = ({
   user,
@@ -23,8 +25,11 @@ const EditUserForm = ({
   isCredentials: boolean;
 }) => {
   const [isPending, startTransition] = useTransition();
+  const [isDeleting, startDeleting] = useTransition();
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
+  const [deleteError, setDeleteError] = useState<string | undefined>('');
+  const [deleteSuccess, setDeleteSuccess] = useState<string | undefined>('');
 
   const {
     register,
@@ -57,65 +62,99 @@ const EditUserForm = ({
     });
   };
 
+  const onDelete = () => {
+    setDeleteSuccess('');
+    setDeleteError('');
+
+    startDeleting(() => {
+      deleteUser(user.id).then(response => {
+        setDeleteError(response.error);
+        setDeleteSuccess(response.success);
+
+        if (response.success) {
+          setTimeout(() => {
+            signOut();
+          }, 5000);
+        }
+      });
+    });
+  };
+
   return (
-    <form className={formStyles} onSubmit={handleSubmit(onSubmit)}>
-      <Heading title='Update Profile' lg />
-      <FormField
-        id='name'
-        type='text'
-        register={register}
-        errors={errors}
-        placeholder='Name'
-        disabled={isPending}
-        label='Name'
-      />
-      {isCredentials && (
+    <>
+      <form className={formStyles} onSubmit={handleSubmit(onSubmit)}>
+        <Heading title='Update Profile' lg />
         <FormField
-          id='email'
-          type='email'
+          id='name'
+          type='text'
           register={register}
           errors={errors}
-          placeholder='Email'
-          disabled={isPending || !isCredentials}
-          label='Email'
+          placeholder='Name'
+          disabled={isPending}
+          label='Name'
         />
-      )}
-      <FormField
-        id='bio'
-        type='text'
-        register={register}
-        errors={errors}
-        placeholder='Bio'
-        disabled={isPending}
-        label='Bio'
-      />
-      <fieldset className={fieldsetStyles}>
-        <legend className='mb-2 pr-2'>Select Tags</legend>
-        <div className={tagDivStyles}>
-          {tags.map(tag => {
-            if (tag === 'All') return null;
-            return (
-              <label key={tag} className={tagLabelStyles}>
-                <input
-                  type='checkbox'
-                  value={tag}
-                  disabled={false}
-                  {...register('tags')}
-                />
-                <span>{tag}</span>
-              </label>
-            );
-          })}
+        {isCredentials && (
+          <FormField
+            id='email'
+            type='email'
+            register={register}
+            errors={errors}
+            placeholder='Email'
+            disabled={isPending || !isCredentials}
+            label='Email'
+          />
+        )}
+        <FormField
+          id='bio'
+          type='text'
+          register={register}
+          errors={errors}
+          placeholder='Bio'
+          disabled={isPending}
+          label='Bio'
+        />
+        <fieldset className={fieldsetStyles}>
+          <legend className='mb-2 pr-2'>Select Tags</legend>
+          <div className={tagDivStyles}>
+            {tags.map(tag => {
+              if (tag === 'All') return null;
+              return (
+                <label key={tag} className={tagLabelStyles}>
+                  <input
+                    type='checkbox'
+                    value={tag}
+                    disabled={false}
+                    {...register('tags')}
+                  />
+                  <span>{tag}</span>
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
+        {error && <Alert message={error} error />}
+        {success && <Alert message={success} success />}
+        <Button
+          type='submit'
+          label={isPending ? 'Saving...' : 'Save Changes'}
+          disabled={isPending}
+        />
+      </form>
+      <div className='max-w-[500px] m-auto mt-12'>
+        <div className='text-rose-500'>
+          <Heading title='Danger Zone' />
         </div>
-      </fieldset>
-      {error && <Alert message={error} error />}
-      {success && <Alert message={success} success />}
-      <Button
-        type='submit'
-        label={isPending ? 'Saving...' : 'Save Changes'}
-        disabled={isPending}
-      />
-    </form>
+        {deleteError && <Alert message={deleteError} error />}
+        {deleteSuccess && <Alert message={deleteSuccess} success />}
+        <Button
+          label={isDeleting ? 'Deleting...' : 'Delete Account'}
+          outline
+          type='button'
+          className='mt-4'
+          onClick={() => onDelete()}
+        />
+      </div>
+    </>
   );
 };
 
