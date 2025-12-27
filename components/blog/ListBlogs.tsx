@@ -14,7 +14,7 @@ interface ListBlogsProps {
   hasMoreBlogs: boolean;
   currentPage: number;
   isUserProfile?: boolean;
-  page: string;
+  page?: string;
 }
 
 const ListBlogs = ({
@@ -52,7 +52,7 @@ const ListBlogs = ({
         <Pagination
           currentPage={currentPage}
           hasMoreBlogs={hasMoreBlogs}
-          page={page}
+          page={page ? page : ''}
         />
       </div>
     </>

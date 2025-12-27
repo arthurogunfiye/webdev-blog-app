@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import queryString from 'query-string';
@@ -19,6 +20,9 @@ const Pagination = ({
     url: '',
     query: currentQuery
   });
+
+  const session = useSession();
+  const userId = session?.data?.user.userId;
 
   return (
     <div className='flex justify-between mt-4'>
@@ -40,6 +44,17 @@ const Pagination = ({
       )}
       {page === 'bookmarksListPage' && hasMoreBlogs && (
         <Link href={`/blog/bookmarks/${currentPage + 1}${searchParams}`}>
+          <span>Next</span>
+        </Link>
+      )}
+
+      {page === 'profilePage' && currentPage > 1 && (
+        <Link href={`/user/${userId}/${currentPage - 1}${searchParams}`}>
+          <span>Previous</span>
+        </Link>
+      )}
+      {page === 'profilePage' && hasMoreBlogs && (
+        <Link href={`/user/${userId}/${currentPage + 1}${searchParams}`}>
           <span>Next</span>
         </Link>
       )}

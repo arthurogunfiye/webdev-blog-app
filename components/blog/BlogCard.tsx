@@ -4,21 +4,35 @@ import Image from 'next/image';
 import UserSummary from './UserSummary';
 import Tag from '../common/Tag';
 import Reactions from './Reactions';
+import { auth } from '@/auth';
 
-const BlogCard = ({
+const BlogCard = async ({
   blog,
   isUserProfile
 }: {
   blog: BlogWithUser;
   isUserProfile?: boolean;
 }) => {
-  console.log('Check user profile status>>> ', isUserProfile);
+  console.log('Check user profile status>>> ', isUserProfile); // Remove this later
+
+  const session = await auth();
+  const userId = session?.user.userId;
+  const isOwner = userId === blog.userId;
+  const isAdmin = session?.user.role === 'ADMIN';
 
   return (
     <div className={parentDivStyles}>
-      <div>
+      <div className={firstDivstyles}>
         {blog.user && (
           <UserSummary user={blog.user} createdDate={blog.createdAt} />
+        )}
+        {isOwner && isUserProfile && !blog.isPublished && (
+          <p className={draftParaStyles}>[Draft]</p>
+        )}
+        {(isOwner || isAdmin) && isUserProfile && (
+          <Link href={`/blog/edit/${blog.id}`} className='text-orange-500'>
+            Edit
+          </Link>
         )}
       </div>
       <div className='my-2 flex justify-between gap-6'>
@@ -61,3 +75,5 @@ const parentDivStyles =
   'border-b border-slate-300 dark:border-slate-700 py-6 cursor pointer';
 const imgLinkStyles = 'w-full max-w-[160px] h-[100px] relative overflow-hidden';
 const tagsDivStyles = 'flex flex-wrap items-center gap-4 my-2';
+const firstDivstyles = 'flex items-center justify-between';
+const draftParaStyles = 'text-yellow-500';

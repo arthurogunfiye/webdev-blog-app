@@ -36,6 +36,8 @@ const AddCommentsForm = ({
     resolver: zodResolver(CommentSchema)
   });
 
+  console.log('Comment creator id>>> ', creatorId); // Remove this later
+
   const onSubmit: SubmitHandler<CommentSchemaType> = data => {
     startTransition(async () => {
       await addComment({

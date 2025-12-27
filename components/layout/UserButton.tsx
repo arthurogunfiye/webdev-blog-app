@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 const UserButton = () => {
   const [mounted, setMounted] = useState(false);
   const session = useSession();
+  const userId = session?.data?.user.userId;
   const router = useRouter();
   const imageUrl = session.data?.user?.image || '';
 
@@ -39,7 +40,7 @@ const UserButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-48'>
-        <DropdownMenuItem onClick={() => router.push('/profile')}>
+        <DropdownMenuItem onClick={() => router.push(`/user/${userId}/1`)}>
           <User size={18} className='mr-2' /> Profile
         </DropdownMenuItem>
         <DropdownMenuSeparator />
