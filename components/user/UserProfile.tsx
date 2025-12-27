@@ -6,6 +6,7 @@ import { getBlogsByUserId } from '@/actions/blogs/getBlogsByUserId';
 import Alert from '../common/Alert';
 import ListBlogs from '../blog/ListBlogs';
 import EditProfileButton from './EditProfileButton';
+import Tag from '../common/Tag';
 
 const UserProfile = async ({ user, page }: { user: User; page: string }) => {
   const currentPage = parseInt(page, 10) || 1;
@@ -53,7 +54,15 @@ const UserProfile = async ({ user, page }: { user: User; page: string }) => {
           {moment(user.createdAt).format('MMMM Do YYYY')}
         </div>
       </div>
-      <div>Tags</div>
+      <div>
+        {!!user.tags.length && (
+          <div className={tagsDivStyles}>
+            {user.tags.map(tag => {
+              return <Tag key={tag}>{tag}</Tag>;
+            })}
+          </div>
+        )}
+      </div>
       <div>
         {error && <Alert error message={error} />}
         {success && (
@@ -85,3 +94,5 @@ const followxDivStyles = 'flex items-center gap-4';
 const memberSinceDivStyles = 'flex justify-center items-center gap-2';
 const idEmailSpanStyles = 'bg-secondary ml-2 py-1 px-2 rounded';
 const idEmailDivStyles = 'flex items-center justify-center gap-6 flex-wrap';
+const tagsDivStyles =
+  'flex items-center justify-center p-6 border-b mb-6 gap-4 flex-wrap';
