@@ -5,6 +5,7 @@ export const EditProfileSchema = z.object({
     .string()
     .min(8, { message: 'Name must be 8 characters long or more' })
     .max(30, { message: 'Name must be 30 characters long or less' }),
+  email: z.email(),
   bio: z.string().optional(),
   tags: z.array(z.string())
 });

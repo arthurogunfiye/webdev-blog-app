@@ -34,13 +34,16 @@ const EditUserForm = ({
     resolver: zodResolver(EditProfileSchema),
     defaultValues: {
       name: user.name || undefined,
+      email: user.email || undefined,
       bio: user.bio || undefined,
       tags: user.tags || undefined
     }
   });
 
   const onSubmit: SubmitHandler<EditProfileSchemaType> = data => {
+    setSuccess('');
     setError('');
+
     startTransition(() => {
       editUser(data, user.id).then(response => {
         if (response?.error) {
@@ -66,6 +69,17 @@ const EditUserForm = ({
         disabled={isPending}
         label='Name'
       />
+      {isCredentials && (
+        <FormField
+          id='email'
+          type='email'
+          register={register}
+          errors={errors}
+          placeholder='Email'
+          disabled={isPending || !isCredentials}
+          label='Email'
+        />
+      )}
       <FormField
         id='bio'
         type='text'
