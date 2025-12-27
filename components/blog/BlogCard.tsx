@@ -13,8 +13,6 @@ const BlogCard = async ({
   blog: BlogWithUser;
   isUserProfile?: boolean;
 }) => {
-  console.log('Check user profile status>>> ', isUserProfile); // Remove this later
-
   const session = await auth();
   const userId = session?.user.userId;
   const isOwner = userId === blog.userId;

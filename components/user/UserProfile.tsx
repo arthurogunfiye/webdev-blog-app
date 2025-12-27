@@ -5,6 +5,7 @@ import moment from 'moment';
 import { getBlogsByUserId } from '@/actions/blogs/getBlogsByUserId';
 import Alert from '../common/Alert';
 import ListBlogs from '../blog/ListBlogs';
+import EditProfileButton from './EditProfileButton';
 
 const UserProfile = async ({ user, page }: { user: User; page: string }) => {
   const currentPage = parseInt(page, 10) || 1;
@@ -34,7 +35,9 @@ const UserProfile = async ({ user, page }: { user: User; page: string }) => {
             </div>
           </div>
         </div>
-        <div>Edit</div>
+        <div>
+          <EditProfileButton user={user} />
+        </div>
       </div>
       <div className={secondDivStyles}>
         <div className={idEmailDivStyles}>
@@ -73,7 +76,6 @@ const parentDivStyles = 'max-w-[1200px] m-auto p-4';
 const firstDivStyles = 'flex gap-6 justify-between';
 const secondDivStyles =
   'flex gap-4 flex-col items-center justify-center p-6 border-y mt-6 flex-wrap';
-const thirdDivStyles = '';
 const userInfoDivStyles =
   'flex items-start sm:items-center gap-6 flex-col sm:flex-row';
 const avatarFallbackStyles = 'border-2 border-slate-500 dark:border-slate-50';

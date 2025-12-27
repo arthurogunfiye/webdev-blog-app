@@ -25,7 +25,7 @@ const Pagination = ({
   const userId = session?.data?.user.userId;
 
   return (
-    <div className='flex justify-between mt-4'>
+    <div className='flex justify-end gap-10 mt-4'>
       {page === 'blogsListPage' && currentPage > 1 && (
         <Link href={`/blog/posts/${currentPage - 1}${searchParams}`}>
           <span>Previous</span>
