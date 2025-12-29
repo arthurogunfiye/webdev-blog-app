@@ -12,7 +12,47 @@ const Profile = async ({
   const session = await auth();
   const currentUserId = session?.user.userId;
 
-  const user = await db.user.findUnique({ where: { id } });
+  const user = await db.user.findUnique({
+    where: { id },
+    include: {
+      followers: {
+        include: {
+          follower: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              followers: {
+                where: { followerId: currentUserId },
+                select: { id: true }
+              }
+            }
+          }
+        }
+      },
+      followings: {
+        include: {
+          following: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              followers: {
+                where: { followerId: currentUserId },
+                select: { id: true }
+              }
+            }
+          }
+        }
+      },
+      _count: {
+        select: {
+          followers: true,
+          followings: true
+        }
+      }
+    }
+  });
 
   if (!user) return <Alert error message='User does not exist!' />;
 

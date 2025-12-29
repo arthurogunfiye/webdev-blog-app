@@ -9,13 +9,36 @@ import EditProfileButton from './EditProfileButton';
 import Tag from '../common/Tag';
 import FollowButton from './FollowButton';
 import { auth } from '@/auth';
+import FollowersList from './FollowersList';
+import FollowingsList from './FollowingsList';
+
+export type UserWithFollows = User & {
+  followers: {
+    follower: Pick<User, 'id' | 'name' | 'image'> & {
+      followers: {
+        id: string;
+      }[];
+    };
+  }[];
+  followings: {
+    following: Pick<User, 'id' | 'name' | 'image'> & {
+      followers: {
+        id: string;
+      }[];
+    };
+  }[];
+  _count: {
+    followers: number;
+    followings: number;
+  };
+};
 
 const UserProfile = async ({
   user,
   page,
   isFollowing
 }: {
-  user: User;
+  user: UserWithFollows;
   page: string;
   isFollowing: boolean;
 }) => {
@@ -43,8 +66,8 @@ const UserProfile = async ({
             <h1 className={h1nameStyles}>{user.name}</h1>
             {user.bio && <p>{user.bio}</p>}
             <div className={followxDivStyles}>
-              <span>Followers</span>
-              <span>Following</span>
+              <FollowersList user={user} />
+              <FollowingsList user={user} />
             </div>
           </div>
         </div>

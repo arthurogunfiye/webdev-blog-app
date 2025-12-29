@@ -3,12 +3,12 @@
 import { User } from '@prisma/client';
 import Button from '../common/Button';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
 interface FollowButtonProps {
-  user: User;
+  user: User | Pick<User, 'id' | 'name' | 'image'>;
   isFollowing: boolean;
   isList?: boolean;
 }
@@ -30,7 +30,6 @@ const FollowButton = ({
     try {
       setLoading(true);
       const response = await axios.post('/api/follow', { followId: user.id });
-
       if (response.data.success === 'followed') {
         setIsFollowing(true);
         // Send notification
@@ -38,9 +37,11 @@ const FollowButton = ({
         setIsFollowing(false);
       }
       router.refresh();
-    } catch (error: any) {
-      console.error('Follow request failed: ', error);
-      toast.error('Something went wrong while trying to follow/unfollow!');
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error('Follow request failed: ', error);
+        toast.error(error?.response?.data?.error);
+      }
     } finally {
       setLoading(false);
     }

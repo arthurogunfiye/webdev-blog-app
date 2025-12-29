@@ -55,7 +55,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <main className='flex-grow'>
               <EdgeStoreProvider>{children}</EdgeStoreProvider>
             </main>
-            <Footer />
           </ThemeProvider>
         </body>
       </html>

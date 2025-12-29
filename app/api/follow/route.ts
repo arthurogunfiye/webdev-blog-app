@@ -10,7 +10,10 @@ export async function POST(req: Request) {
     const followId = body.followId; // User we want to follow
 
     if (!userId) {
-      return new NextResponse('You are not authorised', { status: 401 });
+      return NextResponse.json(
+        { error: 'You are not authorised!' },
+        { status: 401 }
+      );
     }
 
     if (!followId) {
