@@ -7,9 +7,21 @@ import Alert from '../common/Alert';
 import ListBlogs from '../blog/ListBlogs';
 import EditProfileButton from './EditProfileButton';
 import Tag from '../common/Tag';
+import FollowButton from './FollowButton';
+import { auth } from '@/auth';
 
-const UserProfile = async ({ user, page }: { user: User; page: string }) => {
+const UserProfile = async ({
+  user,
+  page,
+  isFollowing
+}: {
+  user: User;
+  page: string;
+  isFollowing: boolean;
+}) => {
   const currentPage = parseInt(page, 10) || 1;
+  const session = await auth();
+  const userId = session?.user.userId; // Currently logged in user
 
   const { success, error } = await getBlogsByUserId({
     page: currentPage,
@@ -37,7 +49,11 @@ const UserProfile = async ({ user, page }: { user: User; page: string }) => {
           </div>
         </div>
         <div>
-          <EditProfileButton user={user} />
+          {userId === user.id ? (
+            <EditProfileButton user={user} />
+          ) : (
+            <FollowButton user={user} isFollowing={isFollowing} />
+          )}
         </div>
       </div>
       <div className={secondDivStyles}>
