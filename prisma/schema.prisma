@@ -7,28 +7,30 @@ datasource db {
 }
 
 model User {
-  id                  String        @id @default(cuid())
-  name                String?
-  email               String        @unique
-  password            String?
-  emailVerified       DateTime?
-  image               String?
-  bio                 String?
-  tags                String[]
-  accounts            Account[]
-  blogs               Blog[]
-  claps               Clap[]
-  followers           Follow[]          @relation("UserAsFollowed")
-  followings          Follow[]          @relation("UserAsFollower")
-  commentClaps        CommentClap[]
-  bookmarks           Bookmark[]
-  comments            Comment[]
-  repliedToComments   Comment[]         @relation("RepliedToUser")
+  id                      String              @id @default(cuid())
+  name                    String?
+  email                   String              @unique
+  password                String?
+  emailVerified           DateTime?
+  image                   String?
+  bio                     String?
+  tags                    String[]
+  accounts                Account[]
+  blogs                   Blog[]
+  claps                   Clap[]
+  followers               Follow[]            @relation("UserAsFollowed")
+  followings              Follow[]            @relation("UserAsFollower")
+  commentClaps            CommentClap[]
+  bookmarks               Bookmark[]
+  comments                Comment[]
+  repliedToComments       Comment[]           @relation("RepliedToUser")
+  receivedNotifications   Notification[]      @relation("NotificationReceived")
+  sentNotifications       Notification[]      @relation("NotificationSent")
 
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
+  createdAt               DateTime            @default(now())
+  updatedAt               DateTime            @updatedAt
 
-  role                UserRole          @default(USER)
+  role                    UserRole            @default(USER)
 }
 
 model Account {
@@ -88,6 +90,7 @@ model Blog {
   claps           Clap[]
   bookmarks       Bookmark[]
   comments        Comment[]
+  notifications   Notification[]
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -124,6 +127,7 @@ model Comment {
   content           String
   createdAt         DateTime  @default(now())
   claps             CommentClap[]
+  notifications     Notification[]
 
   blog              Blog      @relation(fields: [blogId], references: [id], onDelete: Cascade)
   user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -154,4 +158,37 @@ model Follow {
   following         User      @relation("UserAsFollowed", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
+}
+
+model Notification {
+  id              String            @id @default(cuid())
+  recipientId     String
+  senderId        String
+  type            NotificationType
+  entityType      EntityType?
+  blogId          String?
+  commentId       String?
+  content         String?
+  isRead          Boolean           @default(false)
+  createdAt       DateTime          @default(now())
+
+  recipient       User              @relation("NotificationReceived", fields: [recipientId], references: [id], onDelete: Cascade)
+  sender          User              @relation("NotificationSent", fields: [senderId], references: [id], onDelete: Cascade)
+  blog            Blog?             @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  comment         Comment?          @relation(fields: [commentId], references: [id], onDelete: Cascade)
+}
+
+enum NotificationType {
+  NEW_COMMENT
+  COMMENT_REPLY
+  NEW_CLAP
+  FOLLOW
+  SYSTEM_ALERT
+}
+
+enum EntityType {
+  BLOG
+  COMMENT
+  USER
+  SYSTEM
 }

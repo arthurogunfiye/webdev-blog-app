@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import { createNotification } from '@/actions/notifications/createNotification';
 
 interface FollowButtonProps {
   user: User | Pick<User, 'id' | 'name' | 'image'>;
@@ -32,7 +33,14 @@ const FollowButton = ({
       const response = await axios.post('/api/follow', { followId: user.id });
       if (response.data.success === 'followed') {
         setIsFollowing(true);
-        // Send notification
+
+        if (user.id) {
+          await createNotification({
+            recipientId: user.id,
+            type: 'FOLLOW',
+            entityType: 'USER'
+          });
+        }
       } else if (response.data.success === 'unfollowed') {
         setIsFollowing(false);
       }

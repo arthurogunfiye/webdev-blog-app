@@ -8,6 +8,7 @@ import Button from '../common/Button';
 import TextAreaField from '../common/TextAreaField';
 import { addComment } from '@/actions/comments/add-comments';
 import { toast } from 'react-hot-toast';
+import { createNotification } from '@/actions/notifications/createNotification';
 
 interface IAddCommentProps {
   blogId: string;
@@ -36,8 +37,6 @@ const AddCommentsForm = ({
     resolver: zodResolver(CommentSchema)
   });
 
-  console.log('Comment creator id>>> ', creatorId); // Remove this later
-
   const onSubmit: SubmitHandler<CommentSchemaType> = data => {
     startTransition(async () => {
       await addComment({
@@ -46,9 +45,33 @@ const AddCommentsForm = ({
         blogId,
         parentId,
         repliedToUserId: repliedToId
-      }).then(response => {
+      }).then(async response => {
         if (response.error) return toast.error(response.error);
         if (response.success) {
+          if (repliedToId) {
+            await createNotification({
+              recipientId: repliedToId,
+              type: 'COMMENT_REPLY',
+              commentId: parentId,
+              entityType: 'COMMENT',
+              content: data.content
+            });
+          }
+
+          //Send notification in real-time
+
+          if (creatorId) {
+            await createNotification({
+              recipientId: creatorId,
+              type: 'NEW_COMMENT',
+              blogId,
+              entityType: 'BLOG',
+              content: data.content
+            });
+          }
+
+          //Send notification in real-time
+
           toast.success(response.success);
           reset();
         }

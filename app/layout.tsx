@@ -3,7 +3,6 @@ import { Roboto } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 import { ThemeProvider } from 'next-themes';
 import { auth } from '@/auth';
 import { SessionProvider } from 'next-auth/react';
