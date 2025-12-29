@@ -41,7 +41,7 @@ export async function POST(req: Request) {
         }
       });
 
-      return NextResponse.json({ success: 'User unfollowed!' });
+      return NextResponse.json({ success: 'unfollowed' });
     } else {
       // Follow
       await db.follow.create({
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
         }
       });
 
-      return NextResponse.json({ success: 'User followed!' });
+      return NextResponse.json({ success: 'followed' });
     }
   } catch (error) {
     console.error('Error at /api/follow POST: ', error);

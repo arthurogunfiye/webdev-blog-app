@@ -39,6 +39,7 @@ const FollowButton = ({
       }
       router.refresh();
     } catch (error: any) {
+      console.error('Follow request failed: ', error);
       toast.error('Something went wrong while trying to follow/unfollow!');
     } finally {
       setLoading(false);
