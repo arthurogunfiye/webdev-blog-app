@@ -58,24 +58,24 @@ const Notifications = () => {
     handleFetch();
   }, []);
 
-  // useEffect(() => {
-  //   const hash = window.location.hash;
-  //   let timeoutId: number | undefined;
+  useEffect(() => {
+    const hash = window.location.hash;
+    let timeoutId: number | undefined;
 
-  //   if (hash) {
-  //     timeoutId = window.setTimeout(() => {
-  //       const element = document.querySelector(hash);
-  //       if (element) {
-  //         element.scrollIntoView({ behavior: 'smooth' });
-  //       }
-  //     }, 0);
-  //   }
-  //   return () => {
-  //     if (timeoutId !== undefined) {
-  //       window.clearTimeout(timeoutId);
-  //     }
-  //   };
-  // }, [pathname]);
+    if (hash) {
+      timeoutId = window.setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 0);
+    }
+    return () => {
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [pathname]);
 
   // Ensure the bell icon and badge only appear once the client-side session is confirmed
   if (!mounted) return <div className='size-6 mr-2' />; // Empty space to prevent layout jump
