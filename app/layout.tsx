@@ -8,6 +8,7 @@ import { auth } from '@/auth';
 import { SessionProvider } from 'next-auth/react';
 import { EdgeStoreProvider } from '@/lib/edgestore';
 import { Toaster } from 'react-hot-toast';
+import { SocketContextProvider } from '@/context/SocketContext';
 
 const roboto = Roboto({
   subsets: ['latin', 'cyrillic'],
@@ -30,33 +31,35 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await auth();
   return (
     <SessionProvider session={session}>
-      <html lang='en' suppressHydrationWarning>
-        <body
-          className={cn(
-            'antialiased flex flex-col min-h-screen px-2',
-            roboto.className
-          )}
-        >
-          <Toaster
-            position='top-center'
-            toastOptions={{
-              style: { background: 'rgb(51 65 85)', color: '#fff' }
-            }}
-          />
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
+      <SocketContextProvider>
+        <html lang='en' suppressHydrationWarning>
+          <body
+            className={cn(
+              'antialiased flex flex-col min-h-screen px-2',
+              roboto.className
+            )}
           >
-            <Navbar />
+            <Toaster
+              position='top-center'
+              toastOptions={{
+                style: { background: 'rgb(51 65 85)', color: '#fff' }
+              }}
+            />
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
 
-            <main className='flex-grow'>
-              <EdgeStoreProvider>{children}</EdgeStoreProvider>
-            </main>
-          </ThemeProvider>
-        </body>
-      </html>
+              <main className='flex-grow'>
+                <EdgeStoreProvider>{children}</EdgeStoreProvider>
+              </main>
+            </ThemeProvider>
+          </body>
+        </html>
+      </SocketContextProvider>
     </SessionProvider>
   );
 }

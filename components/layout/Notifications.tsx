@@ -109,9 +109,11 @@ const Notifications = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='relative'>
-        <div className={notificationBadgeStyles}>
-          <span>{unreadCount}</span>
-        </div>
+        {!!unreadCount && (
+          <div className={notificationBadgeStyles}>
+            <span>{unreadCount}</span>
+          </div>
+        )}
         <Bell size={24} />
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-[100%] max-w-[400px]'>
