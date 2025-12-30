@@ -1,10 +1,20 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from 'react';
 import { io, Socket } from 'socket.io-client';
 
-interface iSocketContext {}
+interface iSocketContext {
+  refetchNotifications: boolean;
+  sendNotification: (recipientId: string) => void;
+  handleRefetchNotifications: () => void;
+}
 
 export const SocketContext = createContext<iSocketContext | null>(null);
 
@@ -17,10 +27,25 @@ export const SocketContextProvider = ({
   const user = session.data?.user;
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-  console.log('Socket connected>>> ', isSocketConnected);
+  const [refetchNotifications, setRefetchNotifications] = useState(false);
+
+  const sendNotification = useCallback(
+    (recipientId: string) => {
+      if (user && socket && isSocketConnected) {
+        socket.emit('onNotification', recipientId);
+      }
+    },
+    [user, socket, isSocketConnected]
+  );
+
+  function handleRefetchNotifications() {
+    setRefetchNotifications(previousState => !previousState);
+  }
 
   // Initialise a new socket
   useEffect(() => {
+    if (!user) return;
+
     const newSocket = io();
     setSocket(newSocket);
 
@@ -35,22 +60,45 @@ export const SocketContextProvider = ({
 
     function onConnect() {
       setIsSocketConnected(true);
-      console.log('New Connection>>>');
     }
+
     function onDisconnect() {
       setIsSocketConnected(false);
     }
 
+    function onNotification() {
+      handleRefetchNotifications();
+    }
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
+    socket.on('getNotifications', onNotification);
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
+      socket.off('getNotifications', onNotification);
     };
   }, [socket]);
 
-  return <SocketContext.Provider value={{}}>{children}</SocketContext.Provider>;
+  // Setup online users
+  useEffect(() => {
+    if (!socket || !isSocketConnected || !user) return;
+
+    socket.emit('addOnlineUser', user.userId);
+  }, [socket, isSocketConnected, user]);
+
+  return (
+    <SocketContext.Provider
+      value={{
+        refetchNotifications,
+        sendNotification,
+        handleRefetchNotifications
+      }}
+    >
+      {children}
+    </SocketContext.Provider>
+  );
 };
 
 export const useSocket = () => {

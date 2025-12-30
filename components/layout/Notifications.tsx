@@ -17,6 +17,7 @@ import {
   markAllNotificationsAsRead,
   markANotificationsAsRead
 } from '@/actions/notifications/markAsRead';
+import { useSocket } from '@/context/SocketContext';
 
 export type LatestNotifications = Notification & {
   blog: Pick<Blog, 'id' | 'title'> | null;
@@ -29,6 +30,7 @@ const Notifications = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { refetchNotifications, handleRefetchNotifications } = useSocket();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -60,7 +62,7 @@ const Notifications = () => {
       }
     };
     handleFetch();
-  }, []);
+  }, [refetchNotifications]);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -98,12 +100,13 @@ const Notifications = () => {
       router.push(`/user/${notification.senderId}/1`);
     }
 
-    // TODO: Mark as read
     await markANotificationsAsRead(notification.id);
+    handleRefetchNotifications();
   };
 
   const markAllAsRead = async () => {
     await markAllNotificationsAsRead();
+    handleRefetchNotifications();
   };
 
   return (

@@ -7,6 +7,7 @@ import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { createNotification } from '@/actions/notifications/createNotification';
+import { useSocket } from '@/context/SocketContext';
 
 interface FollowButtonProps {
   user: User | Pick<User, 'id' | 'name' | 'image'>;
@@ -22,6 +23,7 @@ const FollowButton = ({
   const [loading, setLoading] = useState(false);
   const [isFollowing, setIsFollowing] = useState(following);
   const router = useRouter();
+  const { sendNotification } = useSocket();
 
   useEffect(() => {
     setIsFollowing(following);
@@ -40,6 +42,7 @@ const FollowButton = ({
             type: 'FOLLOW',
             entityType: 'USER'
           });
+          sendNotification(user.id);
         }
       } else if (response.data.success === 'unfollowed') {
         setIsFollowing(false);
