@@ -58,8 +58,45 @@ const Notifications = () => {
     handleFetch();
   }, []);
 
+  // useEffect(() => {
+  //   const hash = window.location.hash;
+  //   let timeoutId: number | undefined;
+
+  //   if (hash) {
+  //     timeoutId = window.setTimeout(() => {
+  //       const element = document.querySelector(hash);
+  //       if (element) {
+  //         element.scrollIntoView({ behavior: 'smooth' });
+  //       }
+  //     }, 0);
+  //   }
+  //   return () => {
+  //     if (timeoutId !== undefined) {
+  //       window.clearTimeout(timeoutId);
+  //     }
+  //   };
+  // }, [pathname]);
+
   // Ensure the bell icon and badge only appear once the client-side session is confirmed
   if (!mounted) return <div className='size-6 mr-2' />; // Empty space to prevent layout jump
+
+  const handleOpen = async (notification: LatestNotifications) => {
+    if (notification.entityType === 'BLOG' && notification.blogId) {
+      router.push(`/blog/details/${notification.blogId}/#comments`);
+    }
+
+    if (notification.entityType === 'COMMENT' && notification.comment?.blogId) {
+      router.push(
+        `/blog/details/${notification.comment?.blogId}/#${notification.comment.id}`
+      );
+    }
+
+    if (notification.entityType === 'USER' && notification.senderId) {
+      router.push(`/user/${notification.senderId}/1`);
+    }
+
+    // TODO: Mark as read
+  };
 
   return (
     <DropdownMenu>
@@ -95,6 +132,7 @@ const Notifications = () => {
                   notificationDropdownStyles,
                   !notification.isRead && 'bg-secondary'
                 )}
+                onClick={() => handleOpen(notification)}
               >
                 <div>{notification.content}</div>
                 <span className='text-xs'>
