@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 const UserButton = () => {
   const [mounted, setMounted] = useState(false);
   const session = useSession();
+  const isThisUserAnAdmin = session.data?.user.role === 'ADMIN';
   const userId = session?.data?.user.userId;
   const router = useRouter();
   const imageUrl = session.data?.user?.image || '';
@@ -52,10 +53,14 @@ const UserButton = () => {
           <FaRegBookmark size={16} className='mr-2' /> Bookmarks
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push('/admin')}>
-          <Shield size={18} className='mr-2' /> Admin
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {isThisUserAnAdmin && (
+          <>
+            <DropdownMenuItem onClick={() => router.push('/admin')}>
+              <Shield size={18} className='mr-2' /> Admin
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
           <LogOutIcon size={18} className='mr-2' /> Sign Out
         </DropdownMenuItem>
