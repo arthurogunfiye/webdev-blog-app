@@ -28,9 +28,15 @@ const RegisterForm = () => {
     setError('');
     startTransition(() => {
       signUp(data).then(response => {
-        setError(response.error);
-        toast.success(response.success as string);
-        setSuccess(response.success ? 'Verification Email Sent!' : undefined);
+        if (response.error) {
+          toast.error(response.error);
+          setError(response.error);
+        }
+
+        if (response.success) {
+          toast.success(response.success);
+          setSuccess(response.success);
+        }
       });
     });
   };

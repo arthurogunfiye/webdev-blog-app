@@ -13,6 +13,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import moment from 'moment';
+import {
+  markAllNotificationsAsRead,
+  markANotificationsAsRead
+} from '@/actions/notifications/markAsRead';
 
 export type LatestNotifications = Notification & {
   blog: Pick<Blog, 'id' | 'title'> | null;
@@ -77,8 +81,7 @@ const Notifications = () => {
     };
   }, [pathname]);
 
-  // Ensure the bell icon and badge only appear once the client-side session is confirmed
-  if (!mounted) return <div className='size-6 mr-2' />; // Empty space to prevent layout jump
+  if (!mounted) return <div className='size-6 mr-2' />;
 
   const handleOpen = async (notification: LatestNotifications) => {
     if (notification.entityType === 'BLOG' && notification.blogId) {
@@ -96,6 +99,11 @@ const Notifications = () => {
     }
 
     // TODO: Mark as read
+    await markANotificationsAsRead(notification.id);
+  };
+
+  const markAllAsRead = async () => {
+    await markAllNotificationsAsRead();
   };
 
   return (
@@ -109,7 +117,7 @@ const Notifications = () => {
       <DropdownMenuContent className='w-[100%] max-w-[400px]'>
         <div className='flex gap-4 justify-between mb-2 p-2'>
           <h3 className='font-bold text-lg'>Notifications</h3>
-          <button>Mark all as read</button>
+          <button onClick={markAllAsRead}>Mark all as read</button>
         </div>
         {loading && (
           <DropdownMenuItem>
